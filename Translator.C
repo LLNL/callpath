@@ -30,21 +30,21 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /////////////////////////////////////////////////////////////////////////////////////////////////
 #include  "Translator.h"
-#include <sstream>
-#include <iostream>
-#include <fstream>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <sstream>
+#include <iostream>
+#include <fstream>
+
+#include "io_utils.h"
 #ifdef HAVE_SYMTAB
 #include "Symtab.h"
 #include "Symbol.h"
 using namespace Dyninst::SymtabAPI;
 #endif // HAVE_SYMTAB
-
-#include "io_utils.h"
 using wavelet::exists;
 using namespace std;
 
@@ -74,18 +74,17 @@ class symtab_info {
   auto_ptr<Dyninst::SymtabAPI::Symtab> symtab;
   std::vector<Dyninst::SymtabAPI::Symbol*> syms;
 public:
-  symtab_info(const string& filename) { 
-    Symtab *st;
-    if (!exists(filename.c_str()) || !Symtab::openFile(st, filename)) {
-      st = NULL;
-    }
-    symtab.reset(st);
-  }
+  symtab_info(Symtab *st) : symtab(st) { }
 
   ~symtab_info() { }
 
-  bool getSourceLines(vector<LineNoTuple>& lines, uintptr_t offset) {
-    return symtab.get() && symtab->getSourceLines(lines, offset);
+  bool getSourceLine(LineNoTuple& line, uintptr_t offset) {
+    vector<LineNoTuple*> lines;
+    if (!symtab.get() || !symtab->getSourceLines(lines, offset)) {
+      return false;
+    }
+    line = *lines[0];
+    return true;
   }
 
   /// This gets a symbol name from an offset the same way stackwalker does it.
@@ -118,8 +117,6 @@ public:
 
 
 FrameInfo Translator::translate(const FrameId& frame) {
-  vector<LineNoTuple> lines;
-
   ModuleId module = frame.module;
   if (!module) module = executable;
   symtab_info *stinfo = get_symtab_info(module);
@@ -135,8 +132,9 @@ FrameInfo Translator::translate(const FrameId& frame) {
   string name;
   stinfo->getName(offset, name);
 
-  if (stinfo->getSourceLines(lines, translation_offset)) {
-    return FrameInfo(module, offset, lines[0].first, lines[0].second, name);    
+  LineNoTuple line;
+  if (stinfo->getSourceLine(line, translation_offset)) {
+    return FrameInfo(module, offset, line.first, line.second, name);
   } else {
     return FrameInfo(frame.module, frame.offset, name);
   }
@@ -147,7 +145,15 @@ symtab_info *Translator::get_symtab_info(ModuleId module) {
   Translator::cache::iterator sti = symtabs.find(module);
   if (sti == symtabs.end()) {
     string filename = module.str();
-    sti = symtabs.insert(Translator::cache::value_type(module, new symtab_info(module.str()))).first;
+
+    Symtab *symtab;
+    if (!exists(filename.c_str()) || !Symtab::openFile(symtab, filename)) {
+      string exename = executable.str();
+      if (!exists(executable.c_str()) || !Symtab::openFile(symtab, exename)) {
+        symtab = NULL;
+      }
+    }
+    sti = symtabs.insert(Translator::cache::value_type(module, new symtab_info(symtab))).first;
   }
 
   return sti->second;
