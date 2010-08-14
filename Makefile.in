@@ -57,7 +57,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_boost_base.m4 \
 	$(top_srcdir)/m4/lx_lib_dwarf.m4 \
 	$(top_srcdir)/m4/lx_lib_elf.m4 $(top_srcdir)/m4/lx_lib_papi.m4 \
 	$(top_srcdir)/m4/lx_lib_subst.m4 \
-	$(top_srcdir)/m4/lx_lib_xml2.m4 \
+	$(top_srcdir)/m4/lx_lib_xml2.m4 $(top_srcdir)/m4/lx_mpi.m4 \
 	$(top_srcdir)/m4/lx_paradyn_tools.m4 \
 	$(top_srcdir)/m4/lx_pnmpi.m4 \
 	$(top_srcdir)/m4/lx_python_devel.m4 \
@@ -336,9 +336,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign callpath/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu callpath/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign callpath/Makefile
+	  $(AUTOMAKE) --gnu callpath/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
