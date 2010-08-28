@@ -53,11 +53,12 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_boost_base.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
 	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
 	$(top_srcdir)/m4/lx_detect_bluegene.m4 \
+	$(top_srcdir)/m4/lx_find_mpi.m4 \
 	$(top_srcdir)/m4/lx_header_subst.m4 \
 	$(top_srcdir)/m4/lx_lib_dwarf.m4 \
 	$(top_srcdir)/m4/lx_lib_elf.m4 $(top_srcdir)/m4/lx_lib_papi.m4 \
 	$(top_srcdir)/m4/lx_lib_subst.m4 \
-	$(top_srcdir)/m4/lx_lib_xml2.m4 $(top_srcdir)/m4/lx_mpi.m4 \
+	$(top_srcdir)/m4/lx_lib_xml2.m4 \
 	$(top_srcdir)/m4/lx_paradyn_tools.m4 \
 	$(top_srcdir)/m4/lx_pnmpi.m4 \
 	$(top_srcdir)/m4/lx_python_devel.m4 \
@@ -182,6 +183,9 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
+MPICXX = @MPICXX@
+MPI_CXXFLAGS = @MPI_CXXFLAGS@
+MPI_CXXLDFLAGS = @MPI_CXXLDFLAGS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -336,9 +340,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu callpath/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign callpath/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu callpath/Makefile
+	  $(AUTOMAKE) --foreign callpath/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
