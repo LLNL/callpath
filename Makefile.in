@@ -326,7 +326,13 @@ include_HEADERS = \
 	safe_bool.h \
 	string_utils.h
 
-INCLUDES = $(SW_CPPFLAGS) -I$(top_srcdir)/libwavelet $(BOOST_CPPFLAGS) -I$(top_srcdir)
+INCLUDES = \
+	$(SW_CPPFLAGS) \
+	$(MPI_CXXFLAGS) \
+	-I$(top_srcdir)/libwavelet \
+	$(BOOST_CPPFLAGS) \
+	-I$(top_srcdir)
+
 all: all-am
 
 .SUFFIXES:
@@ -340,9 +346,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign callpath/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu callpath/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign callpath/Makefile
+	  $(AUTOMAKE) --gnu callpath/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

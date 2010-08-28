@@ -31,5 +31,10 @@ include_HEADERS = \
 	safe_bool.h \
 	string_utils.h
 
-INCLUDES = $(SW_CPPFLAGS) -I$(top_srcdir)/libwavelet $(BOOST_CPPFLAGS) -I$(top_srcdir)
+INCLUDES = \
+	$(SW_CPPFLAGS) \
+	$(MPI_CXXFLAGS) \
+	-I$(top_srcdir)/libwavelet \
+	$(BOOST_CPPFLAGS) \
+	-I$(top_srcdir)
 
