@@ -35,9 +35,9 @@
 #include "config.h"
 #endif // HAVE_CONFIG_H
 
-#ifdef LIBRA_HAVE_MPI
+#ifdef CALLPATH_HAVE_MPI
 #include "mpi_utils.h"
-#endif // LIBRA_HAVE_MPI
+#endif // CALLPATH_HAVE_MPI
 
 #include "io_utils.h"
 #include <iomanip>
@@ -77,7 +77,7 @@ ostream& operator<<(ostream& out, const FrameId& fid) {
 }
 
 
-#ifdef LIBRA_HAVE_MPI
+#ifdef CALLPATH_HAVE_MPI
 
 size_t FrameId::packed_size(MPI_Comm comm) const {
   size_t pack_size = 0;
@@ -97,5 +97,5 @@ FrameId FrameId::unpack(const ModuleId::id_map& trans, void *buf, int bufsize, i
   return result;
 }
 
-#endif // LIBRA_HAVE_MPI
+#endif // CALLPATH_HAVE_MPI
 

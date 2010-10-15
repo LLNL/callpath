@@ -41,11 +41,11 @@
 #include "safe_bool.h"
 #include "io_utils.h"
 
-#include "libra-config.h"
-#ifdef LIBRA_HAVE_MPI
+#include "callpath-config.h"
+#ifdef CALLPATH_HAVE_MPI
 #include <mpi.h>
 #include "mpi_utils.h"
-#endif // LIBRA_HAVE_MPI
+#endif // CALLPATH_HAVE_MPI
 
 /// Compares by targets of pointer types.
 struct dereference_lt {
@@ -172,7 +172,7 @@ public:
   template<class D>
   friend std::ostream& operator<<(std::ostream& out, UniqueId<D> uid);
 
-#ifdef LIBRA_HAVE_MPI
+#ifdef CALLPATH_HAVE_MPI
   // ----------------------------------------------------------------------------------
   // These routines pack UniqueIds as raw strings.  Receiver process looks up received 
   // strings and returns UniqueIds. 
@@ -274,7 +274,7 @@ public:
     }
   }
   
-#endif // LIBRA_HAVE_MPI
+#endif // CALLPATH_HAVE_MPI
 };
 
 

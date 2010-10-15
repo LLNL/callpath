@@ -32,10 +32,10 @@
 #ifndef CALLPATH_H
 #define CALLPATH_H
 
-#include "libra-config.h"
-#ifdef LIBRA_HAVE_MPI
+#include "callpath-config.h"
+#ifdef CALLPATH_HAVE_MPI
 #include <mpi.h>
-#endif // LIBRA_HAVE_MPI
+#endif // CALLPATH_HAVE_MPI
 
 #include <stdint.h>
 #include <vector>
@@ -103,7 +103,7 @@ public:
   /// Reads a callpath in from a stream.
   static Callpath read_in(std::istream& in);
 
-#ifdef LIBRA_HAVE_MPI
+#ifdef CALLPATH_HAVE_MPI
   /// Gets upper bound on size of this callpath, if it were packed into an MPI buffer.
   size_t packed_size(MPI_Comm comm) const;
 
@@ -115,7 +115,7 @@ public:
   /// a map from send_modules().
   static Callpath unpack(const ModuleId::id_map& modules, void *buf, int bufsize, int *position, MPI_Comm comm);
   
-#endif // LIBRA_HAVE_MPI
+#endif // CALLPATH_HAVE_MPI
   
 private:
   /// Unique, null-terminated array of symbol_ids for this callpath

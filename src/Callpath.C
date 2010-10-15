@@ -43,9 +43,9 @@
 #include <algorithm>
 using namespace std;
 
-#ifdef LIBRA_HAVE_MPI
+#ifdef CALLPATH_HAVE_MPI
 #include "mpi_utils.h"
-#endif //LIBRA_HAVE_MPI
+#endif //CALLPATH_HAVE_MPI
 
 #include "io_utils.h"
 using namespace wavelet;
@@ -85,7 +85,7 @@ Callpath& Callpath::operator=(const Callpath& other) {
 }
 
 
-#ifdef LIBRA_HAVE_MPI
+#ifdef CALLPATH_HAVE_MPI
 
 size_t Callpath::packed_size(MPI_Comm comm) const {
   size_t pack_size = 0;
@@ -119,7 +119,7 @@ Callpath Callpath::unpack(const ModuleId::id_map& modules, void *buf, int bufsiz
   }
   return create(path);
 }
-#endif // LIBRA_HAVE_MPI
+#endif // CALLPATH_HAVE_MPI
 
 
 std::ostream& operator<<(std::ostream& out, const Callpath& cp) {

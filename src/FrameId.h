@@ -37,10 +37,10 @@
 #include <set>
 #include <iostream>
 
-#include "libra-config.h"
-#ifdef LIBRA_HAVE_MPI
+#include "callpath-config.h"
+#ifdef CALLPATH_HAVE_MPI
 #include <mpi.h>
-#endif // LIBRA_HAVE_MPI
+#endif // CALLPATH_HAVE_MPI
 
 #include "ModuleId.h"
 
@@ -69,7 +69,7 @@ public:
   /// Assignment.
   FrameId& operator=(const FrameId& other);
 
-#ifdef LIBRA_HAVE_MPI
+#ifdef CALLPATH_HAVE_MPI
   /// Gets size of a packed frame id for sending via MPI.
   size_t packed_size(MPI_Comm comm) const;
 
@@ -80,7 +80,7 @@ public:
   /// Unpacks a frame from am MPI buffer.  Requires a module id map for translating
   /// remote to local module ids.
   static FrameId unpack(const ModuleId::id_map& trans, void *buf, int bufsize, int *position, MPI_Comm comm);
-#endif // LIBRA_HAVE_MPI  
+#endif // CALLPATH_HAVE_MPI  
   
 private:
   friend bool operator==(const FrameId& lhs, const FrameId& rhs);
