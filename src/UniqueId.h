@@ -148,12 +148,12 @@ public:
   }
 
   void write_out(std::ostream& out) const {
-    wavelet::vl_write(out, identifier->size());
+    ioutils::vl_write(out, identifier->size());
     out.write(identifier->c_str(), identifier->size());
   }
 
   static Derived read_in(std::istream& in) {
-    size_t id_size = wavelet::vl_read(in);
+    size_t id_size = ioutils::vl_read(in);
     char buf[id_size+1];
     in.read(buf, id_size);
     buf[id_size] = '\0';
@@ -161,11 +161,11 @@ public:
   }
   
   void write_id(std::ostream& out) const {
-    wavelet::vl_write(out, reinterpret_cast<uintptr_t>(identifier));
+    ioutils::vl_write(out, reinterpret_cast<uintptr_t>(identifier));
   }
   
   static Derived read_id(const id_map& trans, std::istream& in) {
-    uintptr_t id = wavelet::vl_read(in);
+    uintptr_t id = ioutils::vl_read(in);
     return trans.find(id)->second;
   }
 

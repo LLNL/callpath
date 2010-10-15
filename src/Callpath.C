@@ -48,7 +48,7 @@ using namespace std;
 #endif //CALLPATH_HAVE_MPI
 
 #include "io_utils.h"
-using namespace wavelet;
+using namespace ioutils;
 
 #include "string_utils.h"
 using namespace stringutils;

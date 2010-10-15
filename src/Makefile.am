@@ -9,6 +9,7 @@ endif
 
 lib_LTLIBRARIES = libcallpath.la
 libcallpath_la_SOURCES = \
+	io_utils.C \
 	Callpath.C \
 	FrameId.C \
 	ModuleId.C \
@@ -29,12 +30,14 @@ include_HEADERS = \
 	FrameInfo.h \
 	Translator.h \
 	safe_bool.h \
-	string_utils.h
+	mpi_utils.h
+
+noinst_HEADERS = \
+	string_utils.h \
+	io_utils.h
 
 INCLUDES = \
 	$(SW_CPPFLAGS) \
 	$(MPI_CXXFLAGS) \
-	-I$(top_srcdir)/libwavelet \
-	$(BOOST_CPPFLAGS) \
 	-I$(top_srcdir)
 

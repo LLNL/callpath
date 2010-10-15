@@ -45,7 +45,7 @@
 #include "Symbol.h"
 using namespace Dyninst::SymtabAPI;
 #endif // HAVE_SYMTAB
-using wavelet::exists;
+using ioutils::exists;
 using namespace std;
 
 Translator::Translator(const string& exe) 

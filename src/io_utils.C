@@ -29,73 +29,66 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /////////////////////////////////////////////////////////////////////////////////////////////////
-#include "FrameId.h"
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif // HAVE_CONFIG_H
-
-#ifdef CALLPATH_HAVE_MPI
-#include "mpi_utils.h"
-#endif // CALLPATH_HAVE_MPI
-
 #include "io_utils.h"
-#include <iomanip>
-using namespace ioutils;
 using namespace std;
 
+#include <cassert>
 
-FrameId::FrameId(ModuleId mod, uintptr_t off) 
-  : module(mod), offset(off) { }
+namespace ioutils {
 
-FrameId::FrameId(const string& modname, uintptr_t off)
-  : module(modname), offset(off) { }
+  size_t vl_write(ostream& out, unsigned long long size) {
+    int out_bytes = 0;
 
-FrameId::FrameId(const FrameId& other) 
-  : module(other.module), offset(other.offset) { }
+    do {
+      unsigned long long out_byte = (long long)(size & 0x7Fll);
+      if ((size >>= 7) > 0) out_byte |= 0x80;
 
-FrameId& FrameId::operator=(const FrameId& other) {
-  module = other.module;
-  offset = other.offset;
-  return *this;
-}
+      char oc = (char)out_byte;
+      out.write(&oc, 1);
 
-void FrameId::write_out(ostream& out) const {
-  module.write_id(out);
-  vl_write(out, offset);
-}
+      if (!out.good()) {
+        cerr << "Error: can't write to file." << endl;
+        exit(1);
+      }
+      out_bytes++;
+    } while (size);
 
-FrameId FrameId::read_in(const ModuleId::id_map& trans, istream& in) {
-  FrameId fid(ModuleId::read_id(trans, in), 0);
-  fid.offset = vl_read(in);      // force eval order of reads.
-  return fid;
-}
+    return out_bytes;
+  }
+  
+  
+  unsigned long long vl_read(istream& in) {
+    unsigned shift = 0;
+    unsigned long long long_bytes = 0;
 
-ostream& operator<<(ostream& out, const FrameId& fid) {
-  out << fid.module << "(0x" << hex << fid.offset << ")" << dec;
-  return out;
-}
+    char ichar;
+    unsigned long long file_byte = 0;
+
+    // read variable-length header with number of code bytes
+    do {
+      in.read(&ichar, 1);
+      file_byte = (file_byte & ~0xFF) | ichar;
+      if (!in.good()) return 0;
+
+      long_bytes |= (long long)(file_byte & 0x7Fll) << shift;
+      shift += 7;
+    } while (file_byte & 0x80);
+
+    return long_bytes;
+  }
 
 
-#ifdef CALLPATH_HAVE_MPI
+  signed char log2pow2(unsigned long long powerOf2) {
+    // make sure it's a power of 2.
+    assert(isPowerOf2(powerOf2));
+    
+    signed char n = -1;
+    while (powerOf2 > 0) {
+      powerOf2 >>= 1;
+      n++;
+    }
 
-size_t FrameId::packed_size(MPI_Comm comm) const {
-  size_t pack_size = 0;
-  pack_size += module.packed_size_id(comm);            // module pointer
-  pack_size += mpi_packed_size(1, MPI_UINTPTR_T, comm);  // offset
-  return pack_size;
-}
+    return n;
+  }
 
-void FrameId::pack(void *buf, int bufsize, int *position, MPI_Comm comm) const {
-  module.pack_id(buf, bufsize, position, comm);
-  PMPI_Pack(const_cast<uintptr_t*>(&offset), 1, MPI_UINTPTR_T, buf, bufsize, position, comm);
-}
-
-FrameId FrameId::unpack(const ModuleId::id_map& trans, void *buf, int bufsize, int *position, MPI_Comm comm) {
-  FrameId result(ModuleId::unpack_id(trans, buf, bufsize, position, comm), 0);
-  PMPI_Unpack(buf, bufsize, position, &result.offset, 1, MPI_UINTPTR_T, comm);
-  return result;
-}
-
-#endif // CALLPATH_HAVE_MPI
-
+} //namespace

@@ -41,8 +41,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = src
-DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in
+DIST_COMMON = $(include_HEADERS) $(noinst_HEADERS) \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_prefix_config_h.m4 \
 	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
@@ -87,11 +87,13 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libcallpath_la_LIBADD =
-am__libcallpath_la_SOURCES_DIST = Callpath.C FrameId.C ModuleId.C \
-	FrameInfo.C Translator.C string_utils.C CallpathRuntime.C
+am__libcallpath_la_SOURCES_DIST = io_utils.C Callpath.C FrameId.C \
+	ModuleId.C FrameInfo.C Translator.C string_utils.C \
+	CallpathRuntime.C
 @HAVE_SW_TRUE@am__objects_1 = CallpathRuntime.lo
-am_libcallpath_la_OBJECTS = Callpath.lo FrameId.lo ModuleId.lo \
-	FrameInfo.lo Translator.lo string_utils.lo $(am__objects_1)
+am_libcallpath_la_OBJECTS = io_utils.lo Callpath.lo FrameId.lo \
+	ModuleId.lo FrameInfo.lo Translator.lo string_utils.lo \
+	$(am__objects_1)
 libcallpath_la_OBJECTS = $(am_libcallpath_la_OBJECTS)
 libcallpath_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
@@ -111,7 +113,7 @@ CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libcallpath_la_SOURCES)
 DIST_SOURCES = $(am__libcallpath_la_SOURCES_DIST)
-HEADERS = $(include_HEADERS)
+HEADERS = $(include_HEADERS) $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -256,6 +258,7 @@ top_srcdir = @top_srcdir@
 @HAVE_SW_TRUE@SW_ONLY_SRCS = CallpathRuntime.C 
 lib_LTLIBRARIES = libcallpath.la
 libcallpath_la_SOURCES = \
+	io_utils.C \
 	Callpath.C \
 	FrameId.C \
 	ModuleId.C \
@@ -277,13 +280,15 @@ include_HEADERS = \
 	FrameInfo.h \
 	Translator.h \
 	safe_bool.h \
-	string_utils.h
+	mpi_utils.h
+
+noinst_HEADERS = \
+	string_utils.h \
+	io_utils.h
 
 INCLUDES = \
 	$(SW_CPPFLAGS) \
 	$(MPI_CXXFLAGS) \
-	-I$(top_srcdir)/libwavelet \
-	$(BOOST_CPPFLAGS) \
 	-I$(top_srcdir)
 
 all: all-am
@@ -366,6 +371,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FrameInfo.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ModuleId.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Translator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/io_utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/string_utils.Plo@am__quote@
 
 .C.o:

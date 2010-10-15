@@ -62,7 +62,7 @@ echo "  ParaDyn - SymtabAPI ............................ $have_symtabAPI"
 echo "  ParaDyn - Stackwalker .......................... $have_stackwalk"
 echo
 echo "Build Options:"
-echo "  PMPI Bindings ................................... $pmpi_effort"
+echo "  PMPI Bindings ................................... $pmpi_bindings"
 echo "========================================================"
 echo
 
