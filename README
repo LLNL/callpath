@@ -1,0 +1,10 @@
+==========================================
+  |__|    Callpath
+  |__|    by Todd Gamblin
+  |__|    tgamblin@llnl.gov
+==========================================
+
+This is libcallpath, a tool for representing callpath information 
+consistently in distributed-memory parallel applications.
+
+See the LICENSE file for license and distribution information.  

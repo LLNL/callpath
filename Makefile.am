@@ -1,40 +1,13 @@
-#
-# The Callpath class itself is a separate library b/c it's used by 
-# tools and other libraries (like libeffort).
-#
+AUTOMAKE_OPTIONS = foreign   # Don't require NEWS, README, INSTALL, etc.emacs -
+ACLOCAL_AMFLAGS = -I m4
 
-if HAVE_SW
-SW_ONLY_SRCS = CallpathRuntime.C 
-endif
+# Build-time configuration of libraries.
+include_HEADERS=libra-config.h
+DISTCLEANFILES = libra-config.h _configs.sed
 
-lib_LTLIBRARIES = libcallpath.la
-libcallpath_la_SOURCES = \
-	Callpath.C \
-	FrameId.C \
-	ModuleId.C \
-	FrameInfo.C \
-	Translator.C \
-	string_utils.C \
-	$(SW_ONLY_SRCS)
-libcallpath_la_LDFLAGS = \
-  -avoid-version \
-	$(SW_LDFLAGS) $(SW_RPATH)
+EXTRA_DIST = \
+	LICENSE \
+	README
 
-include_HEADERS = \
-	FrameId.h \
-	Callpath.h \
-	CallpathRuntime.h \
-  UniqueId.h \
-	ModuleId.h \
-	FrameInfo.h \
-	Translator.h \
-	safe_bool.h \
-	string_utils.h
-
-INCLUDES = \
-	$(SW_CPPFLAGS) \
-	$(MPI_CXXFLAGS) \
-	-I$(top_srcdir)/libwavelet \
-	$(BOOST_CPPFLAGS) \
-	-I$(top_srcdir)
+SUBDIRS=src
 

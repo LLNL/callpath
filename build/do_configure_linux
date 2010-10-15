@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# This is a sample configure script for x86 Linux machines.
+# 
+# It has been tested on LLNL's linux clusters, which are AMD Opteron 
+# machines with the CHAOS distribution and mvapich MPI.
+# 
+
+../configure \
+    CXX=mpiCC \
+    CXXFLAGS="-g -O2 -fno-omit-frame-pointer -DMPICH_IGNORE_CXX_SEEK -DVTK_EXCLUDE_STRSTREAM_HEADERS" \
+    --prefix=${HOME}/opt/stackwalker-tramp-1.2b5/x86_64-unknown-linux2.4 \
+    --with-pmpi-bindings \
+    --with-paradyn=${HOME}/projects/dawn-sw/sw_beta5/x86_64-unknown-linux2.4 \
+    --with-tests
+
