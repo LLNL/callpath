@@ -9,8 +9,10 @@
 ../configure \
     CXX=mpiCC \
     CXXFLAGS="-g -O2 -fno-omit-frame-pointer -DMPICH_IGNORE_CXX_SEEK -DVTK_EXCLUDE_STRSTREAM_HEADERS" \
-    --prefix=${HOME}/opt/stackwalker-tramp-1.2b5/x86_64-unknown-linux2.4 \
+    --prefix=${HOME}/opt/callpath/${SYS_TYPE} \
     --with-pmpi-bindings \
-    --with-paradyn=${HOME}/projects/dawn-sw/sw_beta5/x86_64-unknown-linux2.4 \
+    --with-dwarf=/usr/global/tools/openspeedshop/oss-2010-12-07-v2000/chaos_4_x86_64_ib \
+    --with-paradyn=/usr/local/tools/stackwalker-1.2beta5/x86_64-unknown-linux2.4 \
     --with-tests
 
+#    --with-paradyn=${HOME}/opt/stackwalker-tramp-1.2b5/x86_64-unknown-linux2.4
