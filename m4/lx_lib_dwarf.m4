@@ -40,7 +40,12 @@ AC_DEFUN([LX_LIB_DWARF],
   AC_ARG_WITH([dwarf],
               AS_HELP_STRING([--with-dwarf=<dir>],
                              [Path to the installation directory of libdwarf.]),
-              [LX_LIB_SUBST(dwarf, dwarf_attr, DWARF, [$withval/lib], [-ldwarf $ELF_LDFLAGS])],
+              [if [[ -d "$withval/lib64" ]]; then
+                   LX_LIB_SUBST(dwarf, dwarf_attr, DWARF, [$withval/lib64], [-ldwarf $ELF_LDFLAGS])
+               elif [[ -d "$withval/lib" ]]; then
+                   LX_LIB_SUBST(dwarf, dwarf_attr, DWARF, [$withval/lib], [-ldwarf $ELF_LDFLAGS])
+               fi
+              ],
               [LX_LIB_SUBST(dwarf, dwarf_attr, DWARF, [$1],           [-ldwarf $ELF_LDFLAGS])]
   )
 ])

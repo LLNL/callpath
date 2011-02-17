@@ -101,7 +101,7 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
 	distdir dist dist-all distcheck
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS = src tests
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -286,7 +286,8 @@ EXTRA_DIST = \
 	LICENSE \
 	README
 
-SUBDIRS = src
+@INSTALL_TESTS_TRUE@TEST_DIR = tests
+SUBDIRS = src ${TEST_DIR}
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

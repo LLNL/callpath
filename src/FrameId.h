@@ -50,8 +50,8 @@
 ///
 class FrameId {
 public:
-  ModuleId module;
-  uintptr_t offset;
+  ModuleId module;   ///< Load module that this frame came from.
+  uintptr_t offset;  ///< Offset into module where frame's RA pointed.
 
   FrameId(ModuleId m, uintptr_t offset);
   FrameId(const std::string& modname, uintptr_t offset);

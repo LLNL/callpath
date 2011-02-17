@@ -70,11 +70,13 @@ private:
 
   // These counters keep track of stats on how many
   // bad stackwalks we're getting.
-  size_t num_walks;  /// total number of stackwalks.
-  size_t bad_walks;  /// number of bad stackwalks.
+  size_t num_walks;  ///< total number of stackwalks.
+  size_t bad_walks;  ///< number of bad stackwalks.
   
-  // Keep track of address of __libc_start_main
+  /// whether to chop calls found below __libc_start_main
   bool chop_libc_calls;
+
+  /// cached address of __libc_start_main
   uintptr_t libc_start_main_addr;
 };
 
