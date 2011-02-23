@@ -8,7 +8,7 @@
 
 ../configure \
     CXX=mpiCC \
-    CXXFLAGS="-g -O2 -fno-omit-frame-pointer -DMPICH_IGNORE_CXX_SEEK -DVTK_EXCLUDE_STRSTREAM_HEADERS" \
+    CXXFLAGS="-g -O2 -fno-omit-frame-pointer -DMPICH_IGNORE_CXX_SEEK" \
     --prefix=${HOME}/opt/callpath/${SYS_TYPE} \
     --with-pmpi-bindings \
     --with-dwarf=/usr/global/tools/openspeedshop/oss-2010-12-07-v2000/chaos_4_x86_64_ib \

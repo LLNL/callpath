@@ -37,17 +37,18 @@ using namespace std;
 
 #include "frame.h"
 #include "walker.h"
+#include "swk_errors.h"
 using namespace Dyninst;
 using namespace Dyninst::Stackwalker;
 
 #include "FrameId.h"
 
-#ifdef HAVE_SYMTAB
+#ifdef CALLPATH_HAVE_SYMTAB
 #include "Symtab.h"
 #include "Symbol.h"
 #include "AddrLookup.h"
 using namespace Dyninst::SymtabAPI;
-#endif // HAVE_SYMTAB
+#endif // CALLPATH_HAVE_SYMTAB
 
 CallpathRuntime::CallpathRuntime()
   : walker(Walker::newWalker()), 
@@ -74,7 +75,7 @@ Callpath CallpathRuntime::doStackwalk(size_t wrap_level) {
   vector<FrameId> temp;
 
   for (size_t i=start; i < swalk.size(); i++) {
-#ifdef HAVE_SYMTAB
+#ifdef CALLPATH_HAVE_SYMTAB
     if (chop_libc_calls) {
       if (!libc_start_main_addr) {
         string tmp_name;
@@ -88,7 +89,7 @@ Callpath CallpathRuntime::doStackwalk(size_t wrap_level) {
         break;
       }
     }
-#endif // HAVE_SYMTAB
+#endif // CALLPATH_HAVE_SYMTAB
 
     Dyninst::Offset offset;
     string modname;
@@ -107,11 +108,11 @@ Callpath CallpathRuntime::doStackwalk(size_t wrap_level) {
 
 void CallpathRuntime::set_chop_libc(bool chop) {
   chop_libc_calls = chop;
-#ifndef HAVE_SYMTAB
+#ifndef CALLPATH_HAVE_SYMTAB
   if (chop_libc_calls) {
     cerr << "WARNING: chop_libc_calls is not supported without SymtabAPI.  Paths will not be trimmed." << endl;
   }
-#endif // HAVE_SYMTAB
+#endif // CALLPATH_HAVE_SYMTAB
 }
 
 size_t CallpathRuntime::numWalks() {
