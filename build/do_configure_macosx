@@ -7,9 +7,8 @@
 # 
 
 ../configure \
-    CXX=mpiCC \
-    CXXFLAGS="-g -O2 -fno-omit-frame-pointer -DMPICH_IGNORE_CXX_SEEK" \
+    CXX=mpic++ \
+    CXXFLAGS="-g -O2 -Wall -fno-omit-frame-pointer" \
     --prefix=${HOME}/opt/stackwalker-tramp-1.2b5/x86_64-unknown-linux2.4 \
-    --with-pmpi-bindings \
-    --with-paradyn=${HOME}/projects/dawn-sw/sw_beta5/x86_64-unknown-linux2.4
+    --with-pmpi-bindings 
 

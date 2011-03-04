@@ -61,11 +61,6 @@ public:
   Callpath(const Callpath& other);  /// Copy constructor
 
   ~Callpath() { }
-   
-  /// Returns a null callpath.
-  static inline Callpath null() {
-    return Callpath(NULL);
-  }
 
   /// Assignment
   Callpath& operator=(const Callpath& other);
@@ -129,6 +124,7 @@ private:
   friend bool operator==(const Callpath& lhs, const Callpath& rhs);
   friend bool operator<(const Callpath& lhs, const Callpath& rhs);
   friend bool operator>(const Callpath& lhs, const Callpath& rhs);
+  friend bool operator!(const Callpath& cp);
   friend struct callpath_path_lt;
 }; // Callpath
 
@@ -152,6 +148,10 @@ inline bool operator<(const Callpath& lhs, const Callpath& rhs) {
 inline bool operator!=(const Callpath& lhs, const Callpath& rhs) { 
   return !(lhs == rhs);
 } 
+
+inline bool operator!(const Callpath& cp) {
+  return !cp.path;
+}
 
 /// Outputs a simple string representation of this callpath.
 std::ostream& operator<<(std::ostream& out, const Callpath& path);

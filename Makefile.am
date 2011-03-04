@@ -9,5 +9,5 @@ EXTRA_DIST = \
 	LICENSE \
 	README
 
-SUBDIRS=src
+SUBDIRS = src tests
 

@@ -110,7 +110,7 @@ Callpath Callpath::unpack(const ModuleId::id_map& modules, void *buf, int bufsiz
   int len;
   PMPI_Unpack(buf, bufsize, position, &len, 1, MPI_INT, comm); // number of elements
   
-  if (!len) return null();
+  if (!len) return Callpath();
    
   vector<FrameId> path;
   for (int i=0; i < len; i++) {

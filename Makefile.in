@@ -286,7 +286,7 @@ EXTRA_DIST = \
 	LICENSE \
 	README
 
-SUBDIRS = src
+SUBDIRS = src tests
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
