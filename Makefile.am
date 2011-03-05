@@ -9,5 +9,9 @@ EXTRA_DIST = \
 	LICENSE \
 	README
 
-SUBDIRS = src tests
+if INSTALL_TESTS
+TEST_DIR=tests
+endif
+
+SUBDIRS=src ${TEST_DIR}
 

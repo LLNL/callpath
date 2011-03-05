@@ -280,11 +280,11 @@ include_HEADERS = \
 	FrameInfo.h \
 	Translator.h \
 	safe_bool.h \
-	mpi_utils.h
+	mpi_utils.h \
+	io_utils.h
 
 noinst_HEADERS = \
-	string_utils.h \
-	io_utils.h
+	string_utils.h
 
 INCLUDES = \
 	$(SW_CPPFLAGS) \

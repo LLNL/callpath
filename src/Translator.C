@@ -30,21 +30,18 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /////////////////////////////////////////////////////////////////////////////////////////////////
 #include  "Translator.h"
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include "callpath-config.h"
 
 #include <sstream>
 #include <iostream>
 #include <fstream>
 
 #include "io_utils.h"
-#ifdef HAVE_SYMTAB
+#ifdef CALLPATH_HAVE_SYMTAB
 #include "Symtab.h"
 #include "Symbol.h"
 using namespace Dyninst::SymtabAPI;
-#endif // HAVE_SYMTAB
+#endif // CALLPATH_HAVE_SYMTAB
 using ioutils::exists;
 using namespace std;
 
@@ -52,7 +49,7 @@ Translator::Translator(const string& exe)
   : executable(exe), callsite_mode(true) { }
 
 
-#ifndef HAVE_SYMTAB
+#ifndef CALLPATH_HAVE_SYMTAB
 
 // Just return an empty frameinfo if we don't have symtabAPI
 FrameInfo Translator::translate(const FrameId& frame) {
@@ -61,7 +58,7 @@ FrameInfo Translator::translate(const FrameId& frame) {
 
 void Translator::cleanup_symtab_info() { }
 
-#else // HAVE_SYMTAB
+#else // CALLPATH_HAVE_SYMTAB
 
 struct symbol_addr_gt {
   bool operator()(Symbol* lhs, Symbol *rhs)   { return (lhs->getAddr() > rhs->getAddr()); }
@@ -166,7 +163,7 @@ void Translator::cleanup_symtab_info() {
   }
 }
 
-#endif // HAVE_SYMTAB
+#endif // CALLPATH_HAVE_SYMTAB
 
 Translator::~Translator() { 
   cleanup_symtab_info();

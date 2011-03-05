@@ -56,9 +56,9 @@
 class Callpath {
 public:
 
-  Callpath() : path(NULL) { } /// Construct a null callpath.
+  Callpath() : path(NULL) { }       ///< Construct a null callpath.
 
-  Callpath(const Callpath& other);  /// Copy constructor
+  Callpath(const Callpath& other);  ///< Copy constructor
 
   ~Callpath() { }
 

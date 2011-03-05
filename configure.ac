@@ -50,6 +50,25 @@ if [[ "x$pmpi_bindings" = xyes ]]; then
     AC_DEFINE([USE_PMPI], [1], [Define to 1 to use PMPI bindings instead of raw MPI bindings.])
 fi
 
+# If this is provided, we'll install the test library and the tests along with the
+# muster library headers.
+AC_ARG_WITH([tests], 
+    AS_HELP_STRING([--with-tests], 
+                   [If provided, we'll install the tests and the test library too.]),
+    [    if [[ "x$withval" = xyes ]]; then
+             install_tests=yes
+         else
+             install_tests=no
+         fi
+     ],
+    [    install_tests=no   
+     ]
+)
+AM_CONDITIONAL([INSTALL_TESTS], [test "x$install_tests" == xyes])
+if [[ "x$install_tests" = xyes ]]; then
+    AC_MSG_NOTICE([Will install test cases and tests library.])
+fi
+
 
 echo
 echo "========================================================"
@@ -62,7 +81,8 @@ echo "  ParaDyn - SymtabAPI ............................ $have_symtabAPI"
 echo "  ParaDyn - Stackwalker .......................... $have_stackwalk"
 echo
 echo "Build Options:"
-echo "  PMPI Bindings ................................... $pmpi_bindings"
+echo "  PMPI Bindings .................................. $pmpi_bindings"
+echo "  Install Tests .................................. $install_tests"
 echo "========================================================"
 echo
 
