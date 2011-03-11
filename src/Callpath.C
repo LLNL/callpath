@@ -89,7 +89,7 @@ Callpath& Callpath::operator=(const Callpath& other) {
 
 size_t Callpath::packed_size(MPI_Comm comm) const {
   size_t pack_size = 0;
-  pack_size += mpi_packed_size(1, MPI_INT, comm);  // number of frames
+  pack_size += pmpi_packed_size(1, MPI_INT, comm);  // number of frames
   for (size_t i=0; i < size(); i++) {              // size of each frame
     pack_size += (*path)[i].packed_size(comm);
   }

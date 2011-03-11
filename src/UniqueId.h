@@ -179,8 +179,8 @@ public:
   // ----------------------------------------------------------------------------------
   int packed_size(MPI_Comm comm) const {
     int size = 0;
-    size += mpi_packed_size(1, MPI_INT, comm);  // identifier size
-    size += mpi_packed_size(identifier->size(), MPI_CHAR, comm);
+    size += pmpi_packed_size(1, MPI_INT, comm);  // identifier size
+    size += pmpi_packed_size(identifier->size(), MPI_CHAR, comm);
     return size;
   }
 
@@ -214,7 +214,7 @@ public:
 
   /// Returns size of raw identifier.
   size_t packed_size_id(MPI_Comm comm) const {
-    return mpi_packed_size(1, MPI_UINTPTR_T, comm);
+    return pmpi_packed_size(1, MPI_UINTPTR_T, comm);
   }
 
   /// Packs raw identifier onto a buffer.  Receiver will need an id_map to translate.
@@ -236,11 +236,11 @@ public:
   /// packed size of entire buffer full of id_map
   static size_t packed_size_id_map(MPI_Comm comm) {
     size_t size = 0;
-    size += mpi_packed_size(1, MPI_INT, comm);                // number of mappings
+    size += pmpi_packed_size(1, MPI_INT, comm);                // number of mappings
 
     id_set& ids = get_identifiers();
     for (id_set_iterator i=ids.begin(); i != ids.end(); i++) {
-      size += mpi_packed_size(1, MPI_UINTPTR_T, comm);     // local addr of module string
+      size += pmpi_packed_size(1, MPI_UINTPTR_T, comm);     // local addr of module string
       size += UniqueId<Derived>(*i).packed_size(comm);     // size of raw string
     }
     return size;

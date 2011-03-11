@@ -80,7 +80,7 @@ ostream& operator<<(ostream& out, const FrameId& fid) {
 size_t FrameId::packed_size(MPI_Comm comm) const {
   size_t pack_size = 0;
   pack_size += module.packed_size_id(comm);            // module pointer
-  pack_size += mpi_packed_size(1, MPI_UINTPTR_T, comm);  // offset
+  pack_size += pmpi_packed_size(1, MPI_UINTPTR_T, comm);  // offset
   return pack_size;
 }
 

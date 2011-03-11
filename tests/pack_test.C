@@ -30,7 +30,7 @@ double delta() {
   return delta;
 }
 
-const char *modules[] = {
+static const char *modules[] = {
   "/usr/lib/libsvn_repos-1.0.dylib",
   "/usr/lib/libsvn_fs-1.0.dylib",
   "/usr/lib/libsvn_fs_fs-1.0.dylib",
@@ -71,7 +71,6 @@ int main(int argc, char **argv) {
     paths.push_back(cp);
   }
   
-  
   start();
   MPI_Comm comm = MPI_COMM_WORLD;
   size_t modsize = ModuleId::packed_size_id_map(comm);
@@ -99,6 +98,8 @@ int main(int argc, char **argv) {
   ModuleId::unpack_id_map(&buffer[0], buf_size, &unpack_pos, modules, comm);
   cout << "Modules unpack         " << delta() << endl;    
   
+
+
   vector<Callpath> unpacked_paths;
   for (size_t i=0; i < paths.size(); i++) {
     Callpath path = Callpath::unpack(modules, &buffer[0], buf_size, &unpack_pos, comm);
