@@ -12,9 +12,7 @@ set(CALLPATH_PATCH_VERSION 0)
 set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALLPATH_PATCH_VERSION}")
 
 #find_package(stackwalker)   #this does not exist yet
-#what can I replace it with??????????????????????????????????????????????
-#include_directories(path)
-#target_link_libraries(hardcode path to library here - or put -L)
+include_directories("/g/g14/pearce8/opt/sw-1.2beta5/x86_64-unknown-linux2.4")
 
 # Build shared libraries by default.
 get_property(DEFAULT_SHARED GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS)
@@ -46,6 +44,8 @@ set(CMAKE_REQUIRED_INCLUDES  mach/mach.h mach/mach_time.h)
 unset(CMAKE_REQUIRED_LIBRARIES)
 check_function_exists(mach_absolute_time CALLPATH_HAVE_MACH_TIME)
 
+
+
 # Configure a CMake file and set it to be installed.  This file tells other projects
 # how to use Adept Utils.
 foreach (callpath)
@@ -60,10 +60,6 @@ configure_file(
 install(FILES ${PROJECT_BINARY_DIR}/callpath-config.h DESTINATION include)
 
 # Make callpath findable
-foreach (lib callpath)
-  get_target_property(${lib}_LIBRARY_PATH ${lib} LOCATION)
-  get_filename_component(${lib}_LIBRARY ${${lib}_LIBRARY_PATH} NAME)
-endforeach()
 configure_file(
   ${PROJECT_SOURCE_DIR}/callpath-config.cmake.in
   ${PROJECT_BINARY_DIR}/callpath-config.cmake
@@ -75,3 +71,4 @@ install(EXPORT callpath-libs                              DESTINATION lib/cmake/
 # Configure subdirectories here, after everything else, so that they
 # inherit variables set in the global scope.
 add_subdirectory(src) 
+add_subdirectory(tests) 

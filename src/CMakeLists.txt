@@ -16,9 +16,11 @@ endif()
 
 add_library(callpath ${CALLPATH_SOURCES})
 target_link_libraries(callpath)
-install(TARGETS callpath DESTINATION lib EXPORT callpath-libs)
 # add stackwalker here.
-#target_link_libraries(callpath)
+#target_link_libraries(callpath stackwalker)
+target_link_libraries(callpath "/g/g14/pearce8/opt/sw-1.2beta5/x86_64-unknown-linux2.4/lib/libstackwalk.so")
+install(TARGETS callpath DESTINATION lib EXPORT callpath-libs)
+
 
 set(CALLPATH_HEADERS
 	FrameId.h
