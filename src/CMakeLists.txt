@@ -11,8 +11,7 @@ set(CALLPATH_SOURCES
 	string_utils.C)
 
 if (LIBRA_HAVE_SW)
-list (APPEND CALLPATH_SOURCES
-  CallpathRuntime.C)
+  list (APPEND CALLPATH_SOURCES CallpathRuntime.C)
 endif()
 
 add_library(callpath ${CALLPATH_SOURCES})
