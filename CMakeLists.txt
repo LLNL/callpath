@@ -11,6 +11,9 @@ set(CALLPATH_MINOR_VERSION 0)
 set(CALLPATH_PATCH_VERSION 0)
 set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALLPATH_PATCH_VERSION}")
 
+#find_package(stackwalker)   #this does not exist yet
+#what can I replace it with??????????????????????????????????????????????
+
 # Build shared libraries by default.
 get_property(DEFAULT_SHARED GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS)
 option(BUILD_SHARED_LIBS "Build shared libraries?" ${DEFAULT_SHARED})
