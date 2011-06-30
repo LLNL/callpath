@@ -1,19 +1,19 @@
-#ifndef ADEPT_UTILS_CONFIG_H_
-#define ADEPT_UTILS_CONFIG_H_
+#ifndef CALLPATH_CONFIG_H_
+#define CALLPATH_CONFIG_H_
 
 // Define if the POSIX high resolution timer function, clock_gettime() is available.
-#cmakedefine ADEPT_UTILS_HAVE_CLOCK_GETTIME
+#cmakedefine CALLPATH_HAVE_CLOCK_GETTIME
 
 // Define if the POSIX gettimeofday() function is available. 
-#cmakedefine ADEPT_UTILS_HAVE_GETTIMEOFDAY
+#cmakedefine CALLPATH_HAVE_GETTIMEOFDAY
 
 // Define if Mac OS X Mach timers are available.
-#cmakedefine ADEPT_UTILS_HAVE_MACH_TIME
+#cmakedefine CALLPATH_HAVE_MACH_TIME
 
 // Muster version information -- numerical and a version string.
-#define ADEPT_UTILS_MAJOR_VERSION @ADEPT_UTILS_MAJOR_VERSION@
-#define ADEPT_UTILS_MINOR_VERSION @ADEPT_UTILS_MINOR_VERSION@
-#define ADEPT_UTILS_PATCH_VERSION @ADEPT_UTILS_PATCH_VERSION@
-#define ADEPT_UTILS_VERSION       "@ADEPT_UTILS_VERSION@"
+#define CALLPATH_MAJOR_VERSION @CALLPATH_MAJOR_VERSION@
+#define CALLPATH_MINOR_VERSION @CALLPATH_MINOR_VERSION@
+#define CALLPATH_PATCH_VERSION @CALLPATH_PATCH_VERSION@
+#define CALLPATH_VERSION       "@CALLPATH_VERSION@"
 
-#endif // ADEPT_UTILS_CONFIG_H_
+#endif // CALLPATH_CONFIG_H_
