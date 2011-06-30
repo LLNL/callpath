@@ -13,6 +13,8 @@ set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALL
 
 #find_package(stackwalker)   #this does not exist yet
 #what can I replace it with??????????????????????????????????????????????
+#include_directories(path)
+#target_link_libraries(hardcode path to library here - or put -L)
 
 # Build shared libraries by default.
 get_property(DEFAULT_SHARED GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS)
@@ -55,8 +57,20 @@ endforeach()
 configure_file(
   ${PROJECT_SOURCE_DIR}/callpath-config.h.in
   ${PROJECT_BINARY_DIR}/callpath-config.h)
-
 install(FILES ${PROJECT_BINARY_DIR}/callpath-config.h DESTINATION include)
+
+# Make callpath findable
+foreach (lib callpath)
+  get_target_property(${lib}_LIBRARY_PATH ${lib} LOCATION)
+  get_filename_component(${lib}_LIBRARY ${${lib}_LIBRARY_PATH} NAME)
+endforeach()
+configure_file(
+  ${PROJECT_SOURCE_DIR}/callpath-config.cmake.in
+  ${PROJECT_BINARY_DIR}/callpath-config.cmake
+  @ONLY)
+
+install(FILES ${PROJECT_BINARY_DIR}/callpath-config.cmake DESTINATION lib/cmake/callpath)
+install(EXPORT callpath-libs                              DESTINATION lib/cmake/callpath)
 
 # Configure subdirectories here, after everything else, so that they
 # inherit variables set in the global scope.

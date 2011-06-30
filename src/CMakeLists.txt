@@ -16,7 +16,7 @@ endif()
 
 add_library(callpath ${CALLPATH_SOURCES})
 target_link_libraries(callpath)
-install(TARGETS callpath DESTINATION lib)
+install(TARGETS callpath DESTINATION lib EXPORT callpath-libs)
 # add stackwalker here.
 #target_link_libraries(callpath)
 
