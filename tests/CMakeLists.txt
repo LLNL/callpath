@@ -1,14 +1,21 @@
-add_executable(pack-test pack_test.C)
-target_link_libraries(pack-test callpath ${MPI_C_LIBRARIES})
+function(add_test runtime-test)
+  add_test(${test_name} ${src_name})
+  target_link_libraries(${test_name} callpath)
+endfunction() 
 
-add_executable(runtime-test runtime_test.C)
-target_link_libraries(runtime-test callpath ${MPI_C_LIBRARIES})
+function(add_mpi_test pack-test)
+  if (CALLPATH_HAVE_MPI)
+    add_test(${test_name} ${src_name})
+    target_link_libraries(${test_name} ${MPI_LIBRARIES})
+  endif()
+endfunction() 
+
+add_test(runtime-test runtime_test.C)
+add_mpi_test(pack-test pack_test.C)
+
 #???runtime_test_LDFLAGS = $(SW_LDFLAGS) $(SW_RPATH)
 
-#????
-#INCLUDES = \
-#	$(MPI_CXXFLAGS) \
-#	-I$(top_srcdir)/src
-
-
-
+include_directories(
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_SOURCE_DIR}/src
+  ${MPI_INCLUDE_PATH})
