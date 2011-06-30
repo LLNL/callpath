@@ -11,6 +11,7 @@ set(CALLPATH_MINOR_VERSION 0)
 set(CALLPATH_PATCH_VERSION 0)
 set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALLPATH_PATCH_VERSION}")
 
+find_package(MPI)
 #find_package(stackwalker)   #this does not exist yet
 include_directories("/g/g14/pearce8/opt/sw-1.2beta5/x86_64-unknown-linux2.4")
 
