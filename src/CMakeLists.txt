@@ -3,15 +3,15 @@
 # tools and other libraries (like libeffort).
 #
 set(CALLPATH_SOURCES
-	Callpath.C
-	FrameId.C
-	ModuleId.C
-	FrameInfo.C
-	Translator.C
-	string_utils.C)
+	Callpath.cpp
+	FrameId.cpp
+	ModuleId.cpp
+	FrameInfo.cpp
+	Translator.cpp
+	string_utils.cpp)
 
 if (LIBRA_HAVE_SW)
-  list (APPEND CALLPATH_SOURCES CallpathRuntime.C)
+  list (APPEND CALLPATH_SOURCES CallpathRuntime.cpp)
 endif()
 
 add_library(callpath ${CALLPATH_SOURCES})
