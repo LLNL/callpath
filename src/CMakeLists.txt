@@ -4,11 +4,13 @@
 #
 set(CALLPATH_SOURCES
 	Callpath.cpp
+	CallpathRuntime.cpp
 	FrameId.cpp
 	ModuleId.cpp
 	FrameInfo.cpp
 	Translator.cpp
-	string_utils.cpp)
+	string_utils.cpp
+  io_utils.cpp)
 
 if (LIBRA_HAVE_SW)
   list (APPEND CALLPATH_SOURCES CallpathRuntime.cpp)
@@ -18,7 +20,10 @@ add_library(callpath ${CALLPATH_SOURCES})
 target_link_libraries(callpath)
 # add stackwalker here.
 #target_link_libraries(callpath stackwalker)
-target_link_libraries(callpath "/g/g14/pearce8/opt/sw-1.2beta5/x86_64-unknown-linux2.4/lib/libstackwalk.so")
+target_link_libraries(callpath ${STACKWALKER_LIBRARIES})
+if (CALLPATH_HAVE_MPI)
+  target_link_libraries(callpath ${MPI_LIBRARIES})
+endif()
 install(TARGETS callpath DESTINATION lib EXPORT callpath-libs)
 
 

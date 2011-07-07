@@ -1,7 +1,12 @@
-# - callpath: (Todd's TO DO)
+# - callpath: Library to represent callpaths in memory.
 #
 #=============================================================================
-# callpath is ....  (Todd's TO DO)
+# Callpath is a library for representing unique callpaths in memory.  The
+# callpaths built using the library are stored uniquely and represented using
+# reference semantics for fast comparison.  Also, callpaths use
+# (module, offset) pairs as their frames, so a particular frame will have the
+# same representation regardless of different shared library load addresses
+# across processes in MPI applications.
 #
 #=== Usage ===================================================================
 # This file allows Adept Utils to be automatically detected by other libraries
@@ -32,10 +37,6 @@
 if (NOT callpath_CONFIG_LOADED)
   set(callpath_CONFIG_LOADED TRUE)
 
-  # Boost configuration found for this install of adept utils
-  set(callpath_HAVE_Boost         @Boost_FOUND@)
-  set(callpath_Boost_INCLUDE_DIRS @Boost_INCLUDE_DIRS@)
-
   # Install layout
   set(callpath_INSTALL_PREFIX @CMAKE_INSTALL_PREFIX@)
   set(callpath_INCLUDE_DIR    ${callpath_INSTALL_PREFIX}/include)
@@ -45,6 +46,9 @@ if (NOT callpath_CONFIG_LOADED)
   # Includes needed to use Adept Utils
   set(callpath_INCLUDE_PATH ${callpath_INCLUDE_DIR})
   set(callpath_LIB_PATH     ${callpath_LIB_DIR})
+
+  # Whether the library was built with MPI
+	set(callpath_HAVE_MPI @CALLPATH_HAVE_MPI@)
 
   # Library targets imported from file
   include(${callpath_CMAKE_DIR}/callpath-libs.cmake)

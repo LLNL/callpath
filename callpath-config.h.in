@@ -1,14 +1,8 @@
 #ifndef CALLPATH_CONFIG_H_
 #define CALLPATH_CONFIG_H_
 
-// Define if the POSIX high resolution timer function, clock_gettime() is available.
-#cmakedefine CALLPATH_HAVE_CLOCK_GETTIME
-
-// Define if the POSIX gettimeofday() function is available. 
-#cmakedefine CALLPATH_HAVE_GETTIMEOFDAY
-
-// Define if Mac OS X Mach timers are available.
-#cmakedefine CALLPATH_HAVE_MACH_TIME
+// Define if the callpath library was built with MPI.
+#cmakedefine CALLPATH_HAVE_MPI
 
 // Muster version information -- numerical and a version string.
 #define CALLPATH_MAJOR_VERSION @CALLPATH_MAJOR_VERSION@

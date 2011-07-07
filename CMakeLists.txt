@@ -11,19 +11,17 @@ set(CALLPATH_MINOR_VERSION 0)
 set(CALLPATH_PATCH_VERSION 0)
 set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALLPATH_PATCH_VERSION}")
 
-find_package(MPI)
-#find_package(stackwalker)   #this does not exist yet
-include_directories("/g/g14/pearce8/opt/sw-1.2beta5/x86_64-unknown-linux2.4")
+#find_package(stackwalker)   #this does not exist yet so set variables manually
+set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/chaos_4_x86_64_ib/stackwalker-2.0)
+set(STACKWALKER_PLATFORM       x86_64-unknown-linux2.4)
+set(STACKWALKER_INCLUDE_PATH   ${STACKWALKER_HOME}/include)
+set(STACKWALKER_LIBRARIES      ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libstackwalk.so)
+
+include_directories(${STACKWALKER_INCLUDE_PATH})
 
 # Build shared libraries by default.
 get_property(DEFAULT_SHARED GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS)
 option(BUILD_SHARED_LIBS "Build shared libraries?" ${DEFAULT_SHARED})
-
-# Check for various timing functions, so we can support highest-resolution timers available.
-include(CheckFunctionExists)
-
-# Muster requires boost for matrices and random number generators.
-find_package(Boost)
 
 # Find the MPI library and set some definitions
 # This line ensures that we skpi C++ headers altogether, avoiding unnecessary symbols in the .o files.
@@ -32,20 +30,6 @@ find_package(MPI QUIET)
 if (MPI_FOUND)
   set(CALLPATH_HAVE_MPI TRUE)
 endif()
-
-set(CMAKE_REQUIRED_INCLUDES  time.h sys/time.h)
-set(CMAKE_REQUIRED_LIBRARIES rt)
-check_function_exists(clock_gettime CALLPATH_HAVE_CLOCK_GETTIME)
-
-set(CMAKE_REQUIRED_INCLUDES  sys/time.h)
-unset(CMAKE_REQUIRED_LIBRARIES)
-check_function_exists(gettimeofday CALLPATH_HAVE_GETTIMEOFDAY)
-
-set(CMAKE_REQUIRED_INCLUDES  mach/mach.h mach/mach_time.h)
-unset(CMAKE_REQUIRED_LIBRARIES)
-check_function_exists(mach_absolute_time CALLPATH_HAVE_MACH_TIME)
-
-
 
 # Configure a CMake file and set it to be installed.  This file tells other projects
 # how to use Adept Utils.
