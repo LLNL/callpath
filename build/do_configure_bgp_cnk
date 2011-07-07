@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# This is a sample configure script for x86 Linux machines.
+# 
+# It has been tested on LLNL's linux clusters, which are AMD Opteron 
+# machines with the CHAOS distribution and mvapich MPI.
+# 
+
+../configure \
+    CXX=mpicxx \
+    CXXFLAGS="-g -O2 -fno-omit-frame-pointer -DMPICH_IGNORE_CXX_SEEK" \
+    LDFLAGS="-dynamic" \
+    --prefix=${HOME}/opt/callpath/bgp_cnk \
+    --with-pmpi-bindings \
+    --with-paradyn=${HOME}/opt/stackwalker-tramp-1.2b5/ppc32_bgp_compute \
+    --with-tests
