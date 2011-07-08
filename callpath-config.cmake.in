@@ -9,7 +9,7 @@
 # across processes in MPI applications.
 #
 #=== Usage ===================================================================
-# This file allows Adept Utils to be automatically detected by other libraries
+# This file allows callpath to be automatically detected by other libraries
 # using CMake.  To build with callpath, you can do one of two things:
 #
 #   1. Set the callpath_DIR environment variable to the root of the Adept Utils
@@ -43,7 +43,7 @@ if (NOT callpath_CONFIG_LOADED)
   set(callpath_LIB_DIR        ${callpath_INSTALL_PREFIX}/lib)
   set(callpath_CMAKE_DIR      ${callpath_INSTALL_PREFIX}/lib/cmake/callpath)
 
-  # Includes needed to use Adept Utils
+  # Includes needed to use callpath
   set(callpath_INCLUDE_PATH ${callpath_INCLUDE_DIR})
   set(callpath_LIB_PATH     ${callpath_LIB_DIR})
 

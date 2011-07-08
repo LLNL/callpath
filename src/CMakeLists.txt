@@ -12,7 +12,7 @@ set(CALLPATH_SOURCES
 	string_utils.cpp
   io_utils.cpp)
 
-if (LIBRA_HAVE_SW)
+if (CALLPATH_HAVE_SW)
   list (APPEND CALLPATH_SOURCES CallpathRuntime.cpp)
 endif()
 
@@ -26,7 +26,6 @@ if (CALLPATH_HAVE_MPI)
 endif()
 install(TARGETS callpath DESTINATION lib EXPORT callpath-libs)
 
-
 set(CALLPATH_HEADERS
 	FrameId.h
 	Callpath.h
@@ -36,12 +35,13 @@ set(CALLPATH_HEADERS
 	FrameInfo.h
 	Translator.h
 	safe_bool.h
-	string_utils.h)
+	string_utils.h
+  io_utils.h
+  mpi_utils.h)
 
 install(FILES ${CALLPATH_HEADERS} DESTINATION include)
 
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${SW_CPPFLAGS}
-	${MPI_INCLUDE_PATH}
-	${Boost_INCLUDE_DIR})
+	${MPI_INCLUDE_PATH})

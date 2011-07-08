@@ -26,7 +26,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries?" ${DEFAULT_SHARED})
 # Find the MPI library and set some definitions
 # This line ensures that we skpi C++ headers altogether, avoiding unnecessary symbols in the .o files.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOMPI_SKIP_MPICXX -DMPICH_SKIP_MPICXX")
-find_package(MPI QUIET)
+find_package(MPI REQUIRED)
 if (MPI_FOUND)
   set(CALLPATH_HAVE_MPI TRUE)
 endif()
