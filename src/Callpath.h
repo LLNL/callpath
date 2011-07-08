@@ -53,7 +53,7 @@
 /// - Send/receive via MPI.
 /// - Fast comparison and equality operators.
 ///
-class Callpath {
+class Callpath : public safe_bool<Callpath> {
 public:
 
   Callpath() : path(NULL) { }       ///< Construct a null callpath.
@@ -98,6 +98,11 @@ public:
   /// Reads a callpath in from a stream.
   static Callpath read_in(std::istream& in);
 
+  /// True if the callpath is not null
+  bool boolean_test() const {
+    return path;
+  }
+
 #ifdef CALLPATH_HAVE_MPI
   /// Gets upper bound on size of this callpath, if it were packed into an MPI buffer.
   size_t packed_size(MPI_Comm comm) const;
@@ -124,7 +129,6 @@ private:
   friend bool operator==(const Callpath& lhs, const Callpath& rhs);
   friend bool operator<(const Callpath& lhs, const Callpath& rhs);
   friend bool operator>(const Callpath& lhs, const Callpath& rhs);
-  friend bool operator!(const Callpath& cp);
   friend struct callpath_path_lt;
 }; // Callpath
 
@@ -148,10 +152,6 @@ inline bool operator<(const Callpath& lhs, const Callpath& rhs) {
 inline bool operator!=(const Callpath& lhs, const Callpath& rhs) { 
   return !(lhs == rhs);
 } 
-
-inline bool operator!(const Callpath& cp) {
-  return !cp.path;
-}
 
 /// Outputs a simple string representation of this callpath.
 std::ostream& operator<<(std::ostream& out, const Callpath& path);
