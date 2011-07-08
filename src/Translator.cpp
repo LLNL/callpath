@@ -42,7 +42,7 @@
 #include "Symbol.h"
 using namespace Dyninst::SymtabAPI;
 #endif // CALLPATH_HAVE_SYMTAB
-using ioutils::exists;
+using io_utils::exists;
 using namespace std;
 
 Translator::Translator(const string& exe) 

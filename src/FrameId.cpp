@@ -39,7 +39,7 @@
 
 #include "io_utils.h"
 #include <iomanip>
-using namespace ioutils;
+using namespace io_utils;
 using namespace std;
 
 

@@ -1,12 +1,12 @@
 function(add_test test_name src_name)
   add_executable(${test_name} ${src_name})
-  target_link_libraries(${test_name} callpath)
+  target_link_libraries(${test_name} callpath adept-utils)
 endfunction() 
 
 function(add_mpi_test test_name src_name)
   if (CALLPATH_HAVE_MPI)
     add_test(${test_name} ${src_name})
-    target_link_libraries(${test_name} ${MPI_LIBRARIES})
+    target_link_libraries(${test_name} ${MPI_LIBRARIES} adept-utils)
   endif()
 endfunction() 
 
@@ -18,4 +18,5 @@ add_mpi_test(pack-test pack_test.cpp)
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_SOURCE_DIR}/src
+  ${adept-utils_INCLUDE_PATH}
   ${MPI_INCLUDE_PATH})

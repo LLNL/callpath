@@ -48,7 +48,7 @@ using namespace std;
 #endif //CALLPATH_HAVE_MPI
 
 #include "io_utils.h"
-using namespace ioutils;
+using namespace io_utils;
 
 #include "string_utils.h"
 using namespace stringutils;
