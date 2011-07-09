@@ -8,17 +8,13 @@ set(CALLPATH_SOURCES
 	FrameId.cpp
 	ModuleId.cpp
 	FrameInfo.cpp
-	Translator.cpp
-	string_utils.cpp)
+	Translator.cpp)
 
 if (CALLPATH_HAVE_SW)
   list (APPEND CALLPATH_SOURCES CallpathRuntime.cpp)
 endif()
 
 add_library(callpath ${CALLPATH_SOURCES})
-target_link_libraries(callpath)
-# add stackwalker here.
-#target_link_libraries(callpath stackwalker)
 target_link_libraries(callpath ${STACKWALKER_LIBRARIES} adept-utils)
 if (CALLPATH_HAVE_MPI)
   target_link_libraries(callpath ${MPI_LIBRARIES})
@@ -33,13 +29,12 @@ set(CALLPATH_HEADERS
 	ModuleId.h
 	FrameInfo.h
 	Translator.h
-	safe_bool.h
-	string_utils.h)
+	safe_bool.h)
 
 install(FILES ${CALLPATH_HEADERS} DESTINATION include)
 
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${SW_CPPFLAGS}
-  ${adept-utils_INCLUDE_PATH}
+  ${AdeptUtils_INCLUDE_PATH}
 	${MPI_INCLUDE_PATH})

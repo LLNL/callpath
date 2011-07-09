@@ -23,16 +23,16 @@ include_directories(${STACKWALKER_INCLUDE_PATH})
 get_property(DEFAULT_SHARED GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS)
 option(BUILD_SHARED_LIBS "Build shared libraries?" ${DEFAULT_SHARED})
 
-find_package(adept-utils QUIET)
-if(adept-utils_FOUND)
-  message(STATUS "Found adept-utils in ${adept-utils_DIR}.")
-  add_definitions(-DHAVE_ADEPT_UTILS)
-else()
-  message(STATUS "adept-utils package not found.  Building without timing.")
-  # Set these for our callpath-config.cmake file.
-  set(adept-utils_INCLUDE_PATH adept-utils_INCLUDE_PATH-NOTFOUND)
-  set(adept-utils_LIBRARIES    adept-utils_LIBRARIES-NOTFOUND)
-endif()
+function(notify_package name)
+  if (${name}_FOUND)
+    message(STATUS "Found ${name} in ${${name}_DIR}.")
+  else()
+    message(STATUS "${name} package not found.")
+  endif()
+endfunction()
+
+find_package(AdeptUtils REQUIRED)
+notify_package(AdeptUtils)
 
 # Find the MPI library and set some definitions
 # This line ensures that we skpi C++ headers altogether, avoiding unnecessary symbols in the .o files.

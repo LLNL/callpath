@@ -18,5 +18,5 @@ add_mpi_test(pack-test pack_test.cpp)
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${PROJECT_SOURCE_DIR}/src
-  ${adept-utils_INCLUDE_PATH}
+  ${AdeptUtils_INCLUDE_PATH}
   ${MPI_INCLUDE_PATH})
