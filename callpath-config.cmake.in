@@ -41,7 +41,7 @@ if (NOT callpath_CONFIG_LOADED)
   set(callpath_INSTALL_PREFIX @CMAKE_INSTALL_PREFIX@)
   set(callpath_INCLUDE_DIR    ${callpath_INSTALL_PREFIX}/include)
   set(callpath_LIB_DIR        ${callpath_INSTALL_PREFIX}/lib)
-  set(callpath_CMAKE_DIR      ${callpath_INSTALL_PREFIX}/lib/cmake/callpath)
+  set(callpath_CMAKE_DIR      ${callpath_INSTALL_PREFIX}/share/cmake/callpath)
 
   # Includes needed to use callpath
   set(callpath_INCLUDE_PATH ${callpath_INCLUDE_DIR})

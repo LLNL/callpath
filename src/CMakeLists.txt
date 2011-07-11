@@ -15,7 +15,7 @@ if (CALLPATH_HAVE_SW)
 endif()
 
 add_library(callpath ${CALLPATH_SOURCES})
-target_link_libraries(callpath ${STACKWALKER_LIBRARIES} adept-utils)
+target_link_libraries(callpath ${STACKWALKER_LIBRARIES} adept_utils)
 if (CALLPATH_HAVE_MPI)
   target_link_libraries(callpath ${MPI_LIBRARIES})
 endif()
@@ -36,5 +36,5 @@ install(FILES ${CALLPATH_HEADERS} DESTINATION include)
 include_directories(
   ${PROJECT_BINARY_DIR}
   ${SW_CPPFLAGS}
-  ${AdeptUtils_INCLUDE_PATH}
+  ${adept_utils_INCLUDE_PATH}
 	${MPI_INCLUDE_PATH})

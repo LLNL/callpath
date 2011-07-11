@@ -31,8 +31,8 @@ function(notify_package name)
   endif()
 endfunction()
 
-find_package(AdeptUtils REQUIRED)
-notify_package(AdeptUtils)
+find_package(adept_utils REQUIRED)
+notify_package(adept_utils)
 
 # Find the MPI library and set some definitions
 # This line ensures that we skpi C++ headers altogether, avoiding unnecessary symbols in the .o files.
@@ -43,7 +43,7 @@ if (MPI_FOUND)
 endif()
 
 # Configure a CMake file and set it to be installed.  This file tells other projects
-# how to use Adept Utils.
+# how to use adept_utils.
 foreach (callpath)
   get_target_property(${lib}_LIBRARY_PATH ${lib} LOCATION)
   get_filename_component(${lib}_LIBRARY ${${lib}_LIBRARY_PATH} NAME)
@@ -61,8 +61,8 @@ configure_file(
   ${PROJECT_BINARY_DIR}/callpath-config.cmake
   @ONLY)
 
-install(FILES ${PROJECT_BINARY_DIR}/callpath-config.cmake DESTINATION lib/cmake/callpath)
-install(EXPORT callpath-libs                              DESTINATION lib/cmake/callpath)
+install(FILES ${PROJECT_BINARY_DIR}/callpath-config.cmake DESTINATION share/cmake/callpath)
+install(EXPORT callpath-libs                              DESTINATION share/cmake/callpath)
 
 # Configure subdirectories here, after everything else, so that they
 # inherit variables set in the global scope.
