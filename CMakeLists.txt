@@ -12,8 +12,10 @@ set(CALLPATH_PATCH_VERSION 0)
 set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALLPATH_PATCH_VERSION}")
 
 #find_package(stackwalker)   #this does not exist yet so set variables manually
-set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/chaos_4_x86_64_ib/stackwalker-2.0)
-set(STACKWALKER_PLATFORM       x86_64-unknown-linux2.4)
+#set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/chaos_4_x86_64_ib/stackwalker-2.0)
+#set(STACKWALKER_PLATFORM       x86_64-unknown-linux2.4)
+#set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/bgp_cnk/stackwalker-2.0)
+#set(STACKWALKER_PLATFORM       ppc32_bgp_compute)
 set(STACKWALKER_INCLUDE_PATH   ${STACKWALKER_HOME}/include)
 set(STACKWALKER_LIBRARIES      ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libstackwalk.so)
 
@@ -22,6 +24,10 @@ include_directories(${STACKWALKER_INCLUDE_PATH})
 # Build shared libraries by default.
 get_property(DEFAULT_SHARED GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS)
 option(BUILD_SHARED_LIBS "Build shared libraries?" ${DEFAULT_SHARED})
+
+# RPATH setup.  Default is to rpath everything.  Set the option to
+# false if you don't want this behavior.
+option(CMAKE_INSTALL_RPATH_USE_LINK_PATH "Add rpath for all dependencies." TRUE)
 
 function(notify_package name)
   if (${name}_FOUND)
