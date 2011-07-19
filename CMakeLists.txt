@@ -11,14 +11,20 @@ set(CALLPATH_MINOR_VERSION 0)
 set(CALLPATH_PATCH_VERSION 0)
 set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALLPATH_PATCH_VERSION}")
 
+#also, elf and dwarf for BGP...
+set(ELF_INCLUDE_PATH   ${ELF_HOME}/include)
+include_directories(${ELF_INCLUDE_PATH})
+set(DWARF_INCLUDE_PATH   ${DWARF_HOME}/include)
+include_directories(${DWARF_INCLUDE_PATH})
+
 #find_package(stackwalker)   #this does not exist yet so set variables manually
 #set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/chaos_4_x86_64_ib/stackwalker-2.0)
 #set(STACKWALKER_PLATFORM       x86_64-unknown-linux2.4)
 #set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/bgp_cnk/stackwalker-2.0)
 #set(STACKWALKER_PLATFORM       ppc32_bgp_compute)
 set(STACKWALKER_INCLUDE_PATH   ${STACKWALKER_HOME}/include)
-set(STACKWALKER_LIBRARIES      ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libstackwalk.so)
-
+set(STACKWALKER_LIBRARIES      ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libstackwalk.so iberty
+  ${DWARF_HOME}/lib/libdwarf.so ${ELF_HOME}/lib/libelf.so) 
 include_directories(${STACKWALKER_INCLUDE_PATH})
 
 # Build shared libraries by default.
