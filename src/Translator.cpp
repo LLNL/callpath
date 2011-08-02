@@ -159,7 +159,8 @@ symtab_info *Translator::get_symtab_info(ModuleId module) {
 void Translator::cleanup_symtab_info() {
   // need to free all the symtab infos we created.
   for (Translator::cache::iterator sti = symtabs.begin(); sti != symtabs.end(); sti++) {
-    delete sti->second;
+    // TODO: SymtabAPI segfaults when we do this.  Commenting it out until it no longer breaks.
+    // delete sti->second;
   }
 }
 

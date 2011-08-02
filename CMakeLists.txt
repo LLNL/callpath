@@ -15,7 +15,10 @@ set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALL
 set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/chaos_4_x86_64_ib/stackwalker-2.0)
 set(STACKWALKER_PLATFORM       x86_64-unknown-linux2.4)
 set(STACKWALKER_INCLUDE_PATH   ${STACKWALKER_HOME}/include)
-set(STACKWALKER_LIBRARIES      ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libstackwalk.so)
+set(STACKWALKER_LIBRARIES
+  ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libstackwalk.so
+  ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libsymtabAPI.so)
+add_definitions(-DCALLPATH_HAVE_SYMTAB)
 
 include_directories(${STACKWALKER_INCLUDE_PATH})
 
