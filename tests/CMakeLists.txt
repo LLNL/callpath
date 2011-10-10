@@ -1,6 +1,9 @@
 function(add_test test_name src_name)
   add_executable(${test_name} ${src_name})
   target_link_libraries(${test_name} callpath adept_utils)
+  if (CALLPATH_HAVE_MPI)
+    target_link_libraries(${test_name} ${MPI_LIBRARIES})
+  endif()
 endfunction() 
 
 function(add_mpi_test test_name src_name)

@@ -16,9 +16,9 @@ endif()
 
 add_library(callpath ${CALLPATH_SOURCES})
 target_link_libraries(callpath ${STACKWALKER_LIBRARIES} adept_utils)
-if (CALLPATH_HAVE_MPI)
-  target_link_libraries(callpath ${MPI_LIBRARIES})
-endif()
+#if (CALLPATH_HAVE_MPI)
+#  target_link_libraries(callpath ${MPI_LIBRARIES})
+#endif()
 install(TARGETS callpath DESTINATION lib EXPORT callpath-libs)
 
 set(CALLPATH_HEADERS
