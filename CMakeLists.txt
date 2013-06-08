@@ -84,5 +84,6 @@ install(EXPORT callpath-libs                              DESTINATION share/cmak
 
 # Configure subdirectories here, after everything else, so that they
 # inherit variables set in the global scope.
-add_subdirectory(src) 
-add_subdirectory(tests) 
+add_subdirectory(src)
+add_subdirectory(tests)
+add_subdirectory(scripts)

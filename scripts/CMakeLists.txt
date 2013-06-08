@@ -1,0 +1,1 @@
+install(PROGRAMS translate DESTSINATION BIN)
