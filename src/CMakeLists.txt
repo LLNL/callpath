@@ -1,17 +1,17 @@
 #
-# The Callpath class itself is a separate library b/c it's used by 
+# The Callpath class itself is a separate library b/c it's used by
 # tools and other libraries (like libeffort).
 #
 set(CALLPATH_SOURCES
-	Callpath.cpp
-	CallpathRuntime.cpp
-	FrameId.cpp
-	ModuleId.cpp
-	FrameInfo.cpp
-	Translator.cpp)
+	Callpath.C
+	CallpathRuntime.C
+	FrameId.C
+	ModuleId.C
+	FrameInfo.C
+	Translator.C)
 
 if (CALLPATH_HAVE_SW)
-  list (APPEND CALLPATH_SOURCES CallpathRuntime.cpp)
+  list (APPEND CALLPATH_SOURCES CallpathRuntime.C)
 endif()
 
 add_library(callpath ${CALLPATH_SOURCES})

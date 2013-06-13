@@ -16,7 +16,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 # Find a stackwalker library here.
 find_package(Dyninst)
 if (Dyninst_FOUND)
-  include_directories(${Dyninst_INCLUDE_DIRS})
+  include_directories(${Dyninst_INCLUDE_DIR})
   add_definitions(-DCALLPATH_USE_DYNINST)
 
   if (DEFINED SYMTAB_LIBRARY)
