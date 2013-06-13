@@ -1,0 +1,4 @@
+include(CheckFunctionExists)
+set(CMAKE_REQUIRED_INCLUDES execinfo.h)
+check_function_exists(backtrace Backtrace_FOUND)
+unset(CMAKE_REQUIRED_INCLUDES)

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+
+cmake \
+    -D CALLPATH_WALKER=backtrace \
+    -D CMAKE_BUILD_TYPE=RelWithDebInfo \
+    ..

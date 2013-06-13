@@ -22,6 +22,8 @@ expr = r'([^\s]+)\((0x[a-fA-F0-9]+)\)'
 # around an open pipe to an addr2line process, to which we send offsets
 translators = {}
 
+addr2line = "addr2line"
+
 class Translator:
     """A translator is a read/write pipe to an addr2line process.
        If you write an address to it, it will read the file/line info
@@ -32,7 +34,10 @@ class Translator:
     def __init__(self, filename):
         self.filename = filename
         try:
-            self.proc = Popen(["addr2line", "-f", "-e", filename], stdout=PIPE, stdin=PIPE)
+            args = [addr2line]
+            if '-C' in sys.argv: args.append('-C')
+            args += ["-f", "-e", filename]
+            self.proc = Popen(args, stdout=PIPE, stdin=PIPE)
         except:
             self.proc = None
 

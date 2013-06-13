@@ -13,15 +13,27 @@ set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALL
 # Add our module directory to the include path.
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
-# Find a stackwalker library here.
-find_package(Dyninst)
-if (Dyninst_FOUND)
-  include_directories(${Dyninst_INCLUDE_DIR})
-  add_definitions(-DCALLPATH_USE_DYNINST)
+#
+# Let the user choose the walker mechanism.
+#
+option(CALLPATH_WALKER auto
+  "Choose the stackwalker to use.  Options are (auto, dyninst, backtrace). Default is auto.")
 
-  if (DEFINED SYMTAB_LIBRARY)
-    add_definitions(-DCALLPATH_HAVE_SYMTAB)
+string(TOLOWER "${CALLPATH_WALKER}" requested)
+set(WALKER_FOUND FALSE)
+foreach (walker Dyninst Backtrace)
+  string(TOLOWER "${walker}" cur)
+  if (cur STREQUAL requested OR requested STREQUAL auto)
+    find_package(${walker})
+    if (${walker}_FOUND)
+      set(CALLPATH_WALKER ${cur})
+      set(WALKER_FOUND TRUE)
+    endif()
   endif()
+endforeach()
+
+if (NOT WALKER_FOUND)
+  message(ERROR "No suitable stackwalker was found!")
 endif()
 
 # Build shared libraries by default.
