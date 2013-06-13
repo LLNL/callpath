@@ -1,1 +1,1 @@
-install(PROGRAMS translate DESTSINATION BIN)
+install(PROGRAMS translate DESTINATION bin)

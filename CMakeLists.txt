@@ -1,6 +1,5 @@
 ###############################################################
 # Callpath
-#
 ###############################################################
 project(callpath)
 cmake_minimum_required(VERSION 2.8)
@@ -11,27 +10,19 @@ set(CALLPATH_MINOR_VERSION 0)
 set(CALLPATH_PATCH_VERSION 0)
 set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALLPATH_PATCH_VERSION}")
 
-#also, elf and dwarf for BGP...
-set(ELF_HOME /usr)
-set(ELF_INCLUDE_PATH   ${ELF_HOME}/include)
-include_directories(${ELF_INCLUDE_PATH})
-set(DWARF_HOME /usr/global/tools/dyninst/libdwarf/chaos_4_x86_64_ib/libdwarf-20091230)
-set(DWARF_INCLUDE_PATH   ${DWARF_HOME}/include)
-include_directories(${DWARF_INCLUDE_PATH})
+# Add our module directory to the include path.
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 
-#find_package(stackwalker)   #this does not exist yet so set variables manually
-set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/chaos_4_x86_64_ib/stackwalker-2.0)
-#set(STACKWALKER_PLATFORM       x86_64-unknown-linux2.4)
-#set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/bgp_cnk/stackwalker-2.0)
-#set(STACKWALKER_PLATFORM       ppc32_bgp_compute)
-set(STACKWALKER_INCLUDE_PATH   ${STACKWALKER_HOME}/include)
-set(STACKWALKER_LIBRARIES
-  ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libstackwalk.so
-  ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libsymtabAPI.so
-  iberty ${DWARF_HOME}/lib/libdwarf.so ${ELF_HOME}/lib64/libelf.so)
-add_definitions(-DCALLPATH_HAVE_SYMTAB)
+# Find a stackwalker library here.
+find_package(Dyninst)
+if (Dyninst_FOUND)
+  include_directories(${Dyninst_INCLUDE_DIRS})
+  add_definitions(-DCALLPATH_USE_DYNINST)
 
-include_directories(${STACKWALKER_INCLUDE_PATH})
+  if (DEFINED SYMTAB_LIBRARY)
+    add_definitions(-DCALLPATH_HAVE_SYMTAB)
+  endif()
+endif()
 
 # Build shared libraries by default.
 get_property(DEFAULT_SHARED GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS)
@@ -62,7 +53,7 @@ endif()
 
 # Configure a CMake file and set it to be installed.  This file tells other projects
 # how to use adept_utils.
-foreach (callpath)
+foreach (lib callpath)
   get_target_property(${lib}_LIBRARY_PATH ${lib} LOCATION)
   get_filename_component(${lib}_LIBRARY ${${lib}_LIBRARY_PATH} NAME)
 endforeach()
