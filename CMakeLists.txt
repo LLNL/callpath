@@ -16,14 +16,14 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 #
 # Let the user choose the walker mechanism.
 #
-option(CALLPATH_WALKER auto
-  "Choose the stackwalker to use.  Options are (auto, dyninst, backtrace). Default is auto.")
+set(CALLPATH_WALKER auto CACHE STRING
+  "Underlying Stackwalker to use.  Options are (auto, dyninst, backtrace).  Default is auto.")
 
 string(TOLOWER "${CALLPATH_WALKER}" requested)
 set(WALKER_FOUND FALSE)
 foreach (walker Dyninst Backtrace)
   string(TOLOWER "${walker}" cur)
-  if (cur STREQUAL requested OR requested STREQUAL auto)
+  if (cur STREQUAL "${requested}" OR requested STREQUAL "auto")
     find_package(${walker})
     if (${walker}_FOUND)
       set(CALLPATH_WALKER ${cur})
@@ -33,7 +33,7 @@ foreach (walker Dyninst Backtrace)
 endforeach()
 
 if (NOT WALKER_FOUND)
-  message(ERROR "No suitable stackwalker was found!")
+  message(FATAL_ERROR "No suitable stackwalker was found!")
 endif()
 
 # Build shared libraries by default.
