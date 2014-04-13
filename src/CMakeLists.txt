@@ -36,23 +36,28 @@ set(CALLPATH_HEADERS
 	Translator.h
 	safe_bool.h)
 
-#
-# Library source files.
-#
-add_library(callpath
+set(CALLPATH_SOURCES
 	Callpath.C
 	CallpathRuntime.C
 	FrameId.C
 	ModuleId.C
 	FrameInfo.C
 	Translator.C)
-target_link_libraries(callpath
-  ${WALKER_LIBRARIES} adept_utils adept_cutils)
+
+#
+# Library source files.
+#
+add_static_and_shared_library(callpath ${CALLPATH_SOURCES})
+target_link_libraries(
+  callpath ${WALKER_LIBRARIES} adept_utils adept_cutils)
+target_link_libraries(
+  callpath_static ${WALKER_LIBRARIES} adept_utils_static adept_cutils_static)
 
 #
 # Things to install into the prefix.
 #
-install(TARGETS callpath DESTINATION lib EXPORT callpath-libs)
+install(TARGETS callpath callpath_static
+        DESTINATION lib EXPORT callpath-libs)
 install(FILES ${CALLPATH_HEADERS} DESTINATION include)
 
 

@@ -12,6 +12,7 @@ set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALL
 
 # Add our module directory to the include path.
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
+include(StaticAndShared)
 
 #
 # Let the user choose the walker mechanism.
@@ -35,10 +36,6 @@ endforeach()
 if (NOT WALKER_FOUND)
   message(FATAL_ERROR "No suitable stackwalker was found!")
 endif()
-
-# Build shared libraries by default.
-get_property(DEFAULT_SHARED GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS)
-option(BUILD_SHARED_LIBS "Build shared libraries?" ${DEFAULT_SHARED})
 
 # RPATH setup.  Default is to rpath everything.  Set the option to
 # false if you don't want this behavior.
