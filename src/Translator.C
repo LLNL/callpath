@@ -1,34 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2010, Lawrence Livermore National Security, LLC.  
-// Produced at the Lawrence Livermore National Laboratory  
-// Written by Todd Gamblin, tgamblin@llnl.gov.
-// LLNL-CODE-417602
-// All rights reserved.  
-// 
-// This file is part of Libra. For details, see http://github.com/tgamblin/libra.
-// Please also read the LICENSE file for further information.
-// 
-// Redistribution and use in source and binary forms, with or without modification, are
-// permitted provided that the following conditions are met:
-// 
-//  * Redistributions of source code must retain the above copyright notice, this list of
-//    conditions and the disclaimer below.
-//  * Redistributions in binary form must reproduce the above copyright notice, this list of
-//    conditions and the disclaimer (as noted below) in the documentation and/or other materials
-//    provided with the distribution.
-//  * Neither the name of the LLNS/LLNL nor the names of its contributors may be used to endorse
-//    or promote products derived from this software without specific prior written permission.
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
-// LAWRENCE LIVERMORE NATIONAL SECURITY, LLC, THE U.S. DEPARTMENT OF ENERGY OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-// ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2010-2014, Lawrence Livermore National Security, LLC.
+// Produced at the Lawrence Livermore National Laboratory.
+//
+// This file is part of the Callpath library.
+// Written by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
+// LLNL-CODE-647183
+//
+// For details, see https://github.com/scalability-llnl/callpath
+//
+// For details, see https://scalability-llnl.github.io/spack
+// Please also see the LICENSE file for our notice and the LGPL.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License (as published by
+// the Free Software Foundation) version 2.1 dated February 1999.
+//
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the IMPLIED WARRANTY OF
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the terms and
+// conditions of the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+//////////////////////////////////////////////////////////////////////////////
 #include  "Translator.h"
 #include "callpath-config.h"
 
@@ -45,7 +40,7 @@ using namespace Dyninst::SymtabAPI;
 using io_utils::exists;
 using namespace std;
 
-Translator::Translator(const string& exe) 
+Translator::Translator(const string& exe)
   : executable(exe), callsite_mode(true) { }
 
 
@@ -117,7 +112,7 @@ FrameInfo Translator::translate(const FrameId& frame) {
   ModuleId module = frame.module;
   if (!module) module = executable;
   symtab_info *stinfo = get_symtab_info(module);
-    
+
   // Subtract one from the offset here, to hackily
   // convert return address to callsite
   uintptr_t offset = frame.offset;
@@ -166,7 +161,7 @@ void Translator::cleanup_symtab_info() {
 
 #endif // CALLPATH_HAVE_SYMTAB
 
-Translator::~Translator() { 
+Translator::~Translator() {
   cleanup_symtab_info();
 }
 
@@ -180,15 +175,15 @@ void Translator::write_path(ostream& out, const Callpath& path, bool one_line, s
     }
     return;
   }
-  
+
 //Fails under AIX  FrameInfo infos[path.size()];
   vector<FrameInfo> infos(path.size());
-  
+
   // find max field widths for the output.
   size_t max_file = 0;
   size_t max_line = 0;
   size_t max_sym = 0;
-  
+
   for (int i=path.size()-1; i >= 0; i--) {
     infos[i] = translate(path[i]);
     max_file = max(max_file, infos[i].file.size());

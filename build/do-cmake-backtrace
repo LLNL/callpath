@@ -1,5 +1,7 @@
 #!/bin/sh
-
+#
+# Example CMake invocation for building with GNU backtrace.
+#
 
 cmake \
     -D CALLPATH_WALKER=backtrace \

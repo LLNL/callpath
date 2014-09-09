@@ -1,34 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2010, Lawrence Livermore National Security, LLC.  
-// Produced at the Lawrence Livermore National Laboratory  
-// Written by Todd Gamblin, tgamblin@llnl.gov.
-// LLNL-CODE-417602
-// All rights reserved.  
-// 
-// This file is part of Libra. For details, see http://github.com/tgamblin/libra.
-// Please also read the LICENSE file for further information.
-// 
-// Redistribution and use in source and binary forms, with or without modification, are
-// permitted provided that the following conditions are met:
-// 
-//  * Redistributions of source code must retain the above copyright notice, this list of
-//    conditions and the disclaimer below.
-//  * Redistributions in binary form must reproduce the above copyright notice, this list of
-//    conditions and the disclaimer (as noted below) in the documentation and/or other materials
-//    provided with the distribution.
-//  * Neither the name of the LLNS/LLNL nor the names of its contributors may be used to endorse
-//    or promote products derived from this software without specific prior written permission.
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
-// LAWRENCE LIVERMORE NATIONAL SECURITY, LLC, THE U.S. DEPARTMENT OF ENERGY OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-// ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2010-2014, Lawrence Livermore National Security, LLC.
+// Produced at the Lawrence Livermore National Laboratory.
+//
+// This file is part of the Callpath library.
+// Written by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
+// LLNL-CODE-647183
+//
+// For details, see https://github.com/scalability-llnl/callpath
+//
+// For details, see https://scalability-llnl.github.io/spack
+// Please also see the LICENSE file for our notice and the LGPL.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License (as published by
+// the Free Software Foundation) version 2.1 dated February 1999.
+//
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the IMPLIED WARRANTY OF
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the terms and
+// conditions of the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+//////////////////////////////////////////////////////////////////////////////
 #ifndef CALLPATH_H
 #define CALLPATH_H
 
@@ -47,7 +42,7 @@
 
 /// Container for FrameIds, representing a callpath.
 /// Currently, Callpaths are created via StackwalkerAPI in CallpathRuntime.
-/// 
+///
 /// Features:
 /// - Reading/writing to streams.
 /// - Send/receive via MPI.
@@ -72,9 +67,9 @@ public:
 
   /// Gets the ith element in the callpath.
   const FrameId& operator[](size_t i) const {
-    return (*path)[i]; 
+    return (*path)[i];
   }
-  
+
   /// Synonym for operator[], but with bounds checking.
   const FrameId& get(size_t i) const;
 
@@ -94,7 +89,7 @@ public:
 
   /// Version of slice with end assumed to be size().
   Callpath slice(size_t start);
-  
+
   /// Reads a callpath in from a stream.
   static Callpath read_in(std::istream& in);
 
@@ -110,13 +105,13 @@ public:
   /// Packs this callpath into an MPI transport buffer.
   void pack(void *buf, int bufsize, int *position, MPI_Comm comm) const;
 
-  /// Unpacks a callpath packed by pack().  Ensures path pointer uniqueness 
+  /// Unpacks a callpath packed by pack().  Ensures path pointer uniqueness
   /// within processes, but not across nodes.  Requires module translation via
   /// a map from send_modules().
   static Callpath unpack(const ModuleId::id_map& modules, void *buf, int bufsize, int *position, MPI_Comm comm);
-  
+
 #endif // CALLPATH_HAVE_MPI
-  
+
 private:
   /// Unique, null-terminated array of symbol_ids for this callpath
   const std::vector<FrameId> *path;
@@ -134,10 +129,10 @@ private:
 
 
 /// Uses fast pointer comparison b/c path is guaranteed unique per callpath.
-inline bool operator==(const Callpath& lhs, const Callpath& rhs) { 
+inline bool operator==(const Callpath& lhs, const Callpath& rhs) {
   return lhs.path == rhs.path;
-} 
-  
+}
+
 /// Uses fast pointer comparison b/c path is guaranteed unique per callpath.
 inline bool operator>(const Callpath& lhs, const Callpath& rhs) {
   return lhs.path > rhs.path;
@@ -149,9 +144,9 @@ inline bool operator<(const Callpath& lhs, const Callpath& rhs) {
 }
 
 /// Uses fast pointer comparison b/c path is guaranteed unique per callpath.
-inline bool operator!=(const Callpath& lhs, const Callpath& rhs) { 
+inline bool operator!=(const Callpath& lhs, const Callpath& rhs) {
   return !(lhs == rhs);
-} 
+}
 
 /// Outputs a simple string representation of this callpath.
 std::ostream& operator<<(std::ostream& out, const Callpath& path);
@@ -166,7 +161,7 @@ struct pathvector_lt {
     if (lhs == rhs)  return false;
     if (lhs == NULL) return true;
     if (rhs == NULL) return false;
-    
+
     for (size_t i=0; i < lhs->size() && i < rhs->size(); i++) {
       if (lt((*lhs)[i], (*rhs)[i])) {
         return true;
