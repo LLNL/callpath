@@ -148,7 +148,7 @@ Callpath CallpathRuntime::doStackwalk(size_t wrap_level) {
   // build up a temporary callpath
   vector<FrameId> temp;
   for (size_t i=start;
-       i < swalk.size() && swalk[i] != swalk[i].getRA();
+       i < swalk.size() && libc_start_main_addr != swalk[i].getRA();
        i++) {
     Dyninst::Offset offset;
     string modname;
