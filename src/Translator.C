@@ -56,9 +56,9 @@ void Translator::cleanup_symtab_info() { }
 #else // CALLPATH_HAVE_SYMTAB
 
 struct symbol_addr_gt {
-  bool operator()(Symbol* lhs, Symbol *rhs)   { return (lhs->getAddr() > rhs->getAddr()); }
-  bool operator()(uintptr_t lhs, Symbol *rhs) { return (lhs > ((uintptr_t) rhs->getAddr())); }
-  bool operator()(Symbol* lhs, uintptr_t rhs) { return (((uintptr_t)lhs->getAddr()) > rhs); }
+  bool operator()(Symbol* lhs, Symbol *rhs)   { return (lhs->getOffset() > rhs->getOffset()); }
+  bool operator()(uintptr_t lhs, Symbol *rhs) { return (lhs > ((uintptr_t) rhs->getOffset())); }
+  bool operator()(Symbol* lhs, uintptr_t rhs) { return (((uintptr_t)lhs->getOffset()) > rhs); }
 };
 
 
@@ -103,7 +103,7 @@ public:
     if (!name.length())
       name = sym->getPrettyName();
     if (!name.length())
-      name = sym->getName();
+      name = sym->getMangledName();
   }
 };
 
