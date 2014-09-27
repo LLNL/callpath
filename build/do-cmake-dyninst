@@ -4,6 +4,7 @@
 #
 
 cmake \
+    -D CMAKE_INSTALL_PREFIX=$HOME/opt/callpath/$SYS_TYPE \
     -D CMAKE_BUILD_TYPE=RelWithDebInfo \
     -D CALLPATH_WALKER=dyninst \
     -D Dyninst_DIR=/usr/global/tools/dyninst/stackwalker/$SYS_TYPE/current \

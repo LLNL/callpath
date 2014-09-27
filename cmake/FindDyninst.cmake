@@ -63,6 +63,11 @@ endfunction()
 # Find dyninst and all of its dependencies.
 #
 find_library(IBERTY_LIBRARY iberty)
+if (IBERTY_LIBRARY)
+  set(MAYBE_IBERTY ${IBERTY_LIBRARY})
+else()
+  set(MAYBE_IBERTY "")
+endif()
 
 find_path_with_hints(ELF libelf.h)
 find_library_with_hints(ELF elf)
@@ -101,7 +106,7 @@ endif()
 #
 set(SYMTAB_LIBRARIES
   ${SYMTAB_LIBRARY} ${DYNINST_COMMON_LIBRARY}
-  ${IBERTY_LIBRARY} ${DWARF_LIBRARY} ${ELF_LIBRARY})
+  ${MAYBE_IBERTY} ${DWARF_LIBRARY} ${ELF_LIBRARY})
 
 set(STACKWALKER_LIBRARIES
   ${STACKWALKER_LIBRARY} ${SYMTAB_LIBRARIES})
