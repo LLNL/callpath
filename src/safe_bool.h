@@ -79,13 +79,13 @@ public:
 // unintentionally comparing things as though they were bools.
 //
 template <typename T, typename U> 
-void operator==(const safe_bool<T>& lhs,const safe_bool<U>& rhs) {
+bool operator==(const safe_bool<T>& lhs,const safe_bool<U>& rhs) {
   lhs.this_type_does_not_support_comparisons();
   return false;
 }
 
 template <typename T,typename U> 
-void operator!=(const safe_bool<T>& lhs,const safe_bool<U>& rhs) {
+bool operator!=(const safe_bool<T>& lhs,const safe_bool<U>& rhs) {
   lhs.this_type_does_not_support_comparisons();
   return false;
 }
