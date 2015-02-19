@@ -120,7 +120,7 @@ public:
   }
   
   Derived& operator=(const Derived& other) {
-    identifier = other->identifier;
+    return identifier = other->identifier;
   }
   
   bool operator<(const Derived& other) const {
