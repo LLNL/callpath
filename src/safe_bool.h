@@ -1,16 +1,16 @@
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2010-2014, Lawrence Livermore National Security, LLC.
 // Produced at the Lawrence Livermore National Laboratory.
-//
+// 
 // This file is part of the Callpath library.
 // Written by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
 // LLNL-CODE-647183
-//
+// 
 // For details, see https://github.com/scalability-llnl/callpath
-//
+// 
 // For details, see https://scalability-llnl.github.io/spack
 // Please also see the LICENSE file for our notice and the LGPL.
-//
+// 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License (as published by
 // the Free Software Foundation) version 2.1 dated February 1999.
@@ -30,11 +30,11 @@
 ///
 /// Safe bool idiom, adapted from:
 ///   http://www.artima.com/cppsource/safeboolP.html
-///
+/// 
 /// The original code is broken; it attempts access to protected
-/// members from derived classes.  This version is fixed, but
+/// members from derived classes.  This version is fixed, but 
 /// uses only non-virtual access to the bool_type() method.
-///
+/// 
 /// To use, just add a method "bool boolean_test()" to your class
 /// that returns what you want instances to evaluate to in a bool
 /// context.
@@ -73,14 +73,14 @@ public:
 // implemented explicitly in your base class.  This prevents you from
 // unintentionally comparing things as though they were bools.
 //
-template <typename T, typename U>
-void operator==(const safe_bool<T>& lhs,const safe_bool<U>& rhs) {
+template <typename T, typename U> 
+bool operator==(const safe_bool<T>& lhs,const safe_bool<U>& rhs) {
   lhs.this_type_does_not_support_comparisons();
   return false;
 }
 
-template <typename T,typename U>
-void operator!=(const safe_bool<T>& lhs,const safe_bool<U>& rhs) {
+template <typename T,typename U> 
+bool operator!=(const safe_bool<T>& lhs,const safe_bool<U>& rhs) {
   lhs.this_type_does_not_support_comparisons();
   return false;
 }
