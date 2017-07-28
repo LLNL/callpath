@@ -150,9 +150,17 @@ Callpath CallpathRuntime::doStackwalk(size_t wrap_level) {
     void *symtab;
 
     if (!swalk[i].getLibOffset(modname, offset, symtab)) {
-      temp.push_back(FrameId(ModuleId(), swalk[i].getRA()));
+      if (swalk[i].isTopFrame()) {
+        temp.push_back(FrameId(ModuleId(), swalk[i].getRA()));
+      } else {
+        temp.push_back(FrameId(ModuleId(), swalk[i].getRA() - 1));
+      }
     } else {
-      temp.push_back(FrameId(modname, offset));
+      if (!swalk[i].isTopFrame()) {
+        offset -= 1;
+      }
+      temp.push_back(FrameId(modname, offset)
+      );
     }
   }
 
