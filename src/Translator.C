@@ -126,7 +126,7 @@ FrameInfo Translator::translate(const FrameId& frame) {
 
   LineNoTuple line;
   if (stinfo->getSourceLine(line, translation_offset)) {
-    return FrameInfo(module, offset, line.first, line.second, name);
+    return FrameInfo(module, offset, line.getFile(), line.getLine(), name);
   } else {
     return FrameInfo(frame.module, frame.offset, name);
   }
