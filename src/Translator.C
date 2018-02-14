@@ -35,6 +35,8 @@
 #ifdef CALLPATH_HAVE_SYMTAB
 #include "Symtab.h"
 #include "Symbol.h"
+#include <memory>
+#include <algorithm>
 using namespace Dyninst::SymtabAPI;
 #endif // CALLPATH_HAVE_SYMTAB
 using io_utils::exists;
@@ -154,8 +156,7 @@ symtab_info *Translator::get_symtab_info(ModuleId module) {
 void Translator::cleanup_symtab_info() {
   // need to free all the symtab infos we created.
   for (Translator::cache::iterator sti = symtabs.begin(); sti != symtabs.end(); sti++) {
-    // TODO: SymtabAPI segfaults when we do this.  Commenting it out until it no longer breaks.
-    // delete sti->second;
+    delete sti->second;
   }
 }
 
