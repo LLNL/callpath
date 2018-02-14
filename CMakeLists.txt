@@ -1,6 +1,5 @@
 ###############################################################
 # Callpath
-#
 ###############################################################
 project(callpath)
 cmake_minimum_required(VERSION 2.8)
@@ -11,31 +10,32 @@ set(CALLPATH_MINOR_VERSION 0)
 set(CALLPATH_PATCH_VERSION 0)
 set(CALLPATH_VERSION "${CALLPATH_MAJOR_VERSION}.${CALLPATH_MINOR_VERSION}.${CALLPATH_PATCH_VERSION}")
 
-#also, elf and dwarf for BGP...
-set(ELF_HOME /usr)
-set(ELF_INCLUDE_PATH   ${ELF_HOME}/include)
-include_directories(${ELF_INCLUDE_PATH})
-set(DWARF_HOME /usr/global/tools/dyninst/libdwarf/chaos_4_x86_64_ib/libdwarf-20091230)
-set(DWARF_INCLUDE_PATH   ${DWARF_HOME}/include)
-include_directories(${DWARF_INCLUDE_PATH})
+# Add our module directory to the include path.
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
+include(StaticAndShared)
 
-#find_package(stackwalker)   #this does not exist yet so set variables manually
-set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/chaos_4_x86_64_ib/stackwalker-2.0)
-#set(STACKWALKER_PLATFORM       x86_64-unknown-linux2.4)
-#set(STACKWALKER_HOME           /usr/global/tools/dyninst/stackwalker/bgp_cnk/stackwalker-2.0)
-#set(STACKWALKER_PLATFORM       ppc32_bgp_compute)
-set(STACKWALKER_INCLUDE_PATH   ${STACKWALKER_HOME}/include)
-set(STACKWALKER_LIBRARIES
-  ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libstackwalk.so
-  ${STACKWALKER_HOME}/${STACKWALKER_PLATFORM}/lib/libsymtabAPI.so
-  iberty ${DWARF_HOME}/lib/libdwarf.so ${ELF_HOME}/lib64/libelf.so)
-add_definitions(-DCALLPATH_HAVE_SYMTAB)
+#
+# Let the user choose the walker mechanism.
+#
+set(CALLPATH_WALKER auto CACHE STRING
+  "Underlying Stackwalker to use.  Options are (auto, dyninst, backtrace).  Default is auto.")
 
-include_directories(${STACKWALKER_INCLUDE_PATH})
+string(TOLOWER "${CALLPATH_WALKER}" requested)
+set(WALKER_FOUND FALSE)
+foreach (walker Dyninst Backtrace)
+  string(TOLOWER "${walker}" cur)
+  if (cur STREQUAL "${requested}" OR requested STREQUAL "auto")
+    find_package(${walker})
+    if (${walker}_FOUND)
+      set(CALLPATH_WALKER ${cur})
+      set(WALKER_FOUND TRUE)
+    endif()
+  endif()
+endforeach()
 
-# Build shared libraries by default.
-get_property(DEFAULT_SHARED GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS)
-option(BUILD_SHARED_LIBS "Build shared libraries?" ${DEFAULT_SHARED})
+if (NOT WALKER_FOUND)
+  message(FATAL_ERROR "No suitable stackwalker was found!")
+endif()
 
 # RPATH setup.  Default is to rpath everything.  Set the option to
 # false if you don't want this behavior.
@@ -62,7 +62,7 @@ endif()
 
 # Configure a CMake file and set it to be installed.  This file tells other projects
 # how to use adept_utils.
-foreach (callpath)
+foreach (lib callpath)
   get_target_property(${lib}_LIBRARY_PATH ${lib} LOCATION)
   get_filename_component(${lib}_LIBRARY ${${lib}_LIBRARY_PATH} NAME)
 endforeach()
@@ -84,5 +84,6 @@ install(EXPORT callpath-libs                              DESTINATION share/cmak
 
 # Configure subdirectories here, after everything else, so that they
 # inherit variables set in the global scope.
-add_subdirectory(src) 
-add_subdirectory(tests) 
+add_subdirectory(src)
+add_subdirectory(tests)
+add_subdirectory(scripts)

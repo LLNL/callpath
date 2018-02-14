@@ -24,32 +24,8 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //////////////////////////////////////////////////////////////////////////////
-#ifndef FRAME_INFO_H
-#define FRAME_INFO_H
+#include "ModuleId.h"
 
-#include <string>
-#include <iostream>
-#include "FrameId.h"
+ModuleId::ModuleId() : UniqueId<ModuleId>() { }
+ModuleId::ModuleId(const std::string& id) : UniqueId<ModuleId>(id) { }
 
-struct FrameInfo {
-  ModuleId module;
-  std::string offset;
-  std::string file;
-  std::string line_num;
-  std::string sym_name;
-
-  FrameInfo();
-  FrameInfo(ModuleId module, uintptr_t offset, std::string name="");
-  FrameInfo(ModuleId module, uintptr_t offset,
-            const std::string& filename, int line, const std::string& sym_name);
-  ~FrameInfo();
-
-  void write(std::ostream& out, size_t file_line_width=0, size_t sym_width=0) const;
-};
-
-inline std::ostream& operator<<(std::ostream& out, const FrameInfo& info) {
-  info.write(out);
-  return out;
-}
-
-#endif // FRAME_INFO_H

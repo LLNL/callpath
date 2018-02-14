@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# Example CMake invocation for building with dyninst.
+#
+
+cmake \
+    -D CMAKE_INSTALL_PREFIX=$HOME/opt/callpath/$SYS_TYPE \
+    -D CMAKE_BUILD_TYPE=RelWithDebInfo \
+    -D CALLPATH_WALKER=dyninst \
+    -D Dyninst_DIR=/usr/global/tools/dyninst/stackwalker/$SYS_TYPE/current \
+    -D DWARF_DIR=/usr/global/tools/dyninst/libdwarf/$SYS_TYPE/dwarf-20111030 \
+    ..

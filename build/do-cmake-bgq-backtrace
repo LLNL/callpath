@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cmake \
+    -D CMAKE_TOOLCHAIN_FILE=../cmake/Toolchain/BlueGeneQ-gnu.cmake \
+    -D CMAKE_BUILD_TYPE=RelWithDebInfo \
+    -D CALLPATH_WALKER=backtrace \
+    ..

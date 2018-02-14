@@ -24,32 +24,53 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //////////////////////////////////////////////////////////////////////////////
-#ifndef FRAME_INFO_H
-#define FRAME_INFO_H
+#include "FrameInfo.h"
 
-#include <string>
-#include <iostream>
-#include "FrameId.h"
+#include <sstream>
+#include <iomanip>
+using namespace std;
 
-struct FrameInfo {
-  ModuleId module;
-  std::string offset;
-  std::string file;
-  std::string line_num;
-  std::string sym_name;
 
-  FrameInfo();
-  FrameInfo(ModuleId module, uintptr_t offset, std::string name="");
-  FrameInfo(ModuleId module, uintptr_t offset,
-            const std::string& filename, int line, const std::string& sym_name);
-  ~FrameInfo();
+FrameInfo::FrameInfo(ModuleId m, uintptr_t o, const string& f, int l, const string& n)
+  : module(m), file(f), sym_name(n) {
 
-  void write(std::ostream& out, size_t file_line_width=0, size_t sym_width=0) const;
-};
+  ostringstream ln;
+  ln << l;
+  line_num = ln.str();
 
-inline std::ostream& operator<<(std::ostream& out, const FrameInfo& info) {
-  info.write(out);
-  return out;
+  ostringstream off;
+  off << "(0x" << hex << o << dec << ")";
+  offset = off.str();
 }
 
-#endif // FRAME_INFO_H
+FrameInfo::FrameInfo() : module() { }
+
+FrameInfo::FrameInfo(ModuleId m, uintptr_t o, string n) : module(m), sym_name(n) {
+  ostringstream off;
+  off << "(0x" << hex << o << dec << ")";
+  offset = off.str();
+}
+
+FrameInfo::~FrameInfo() { }
+
+void FrameInfo::write(ostream& out, size_t file_line_width, size_t sym_width) const {
+  if (file == "") {
+    out << left << setw(file_line_width) << "??";
+  } else {
+    ostringstream file_line;
+    file_line << file + ":" + line_num;
+    out << left << setw(file_line_width) << file_line.str();
+  }
+  if (!file_line_width) out << ":";
+
+  if (sym_name == "") {
+    out << left << setw(sym_width) << "??";
+  } else {
+    out << left << setw(sym_width) << sym_name;
+  }
+  out << " ";
+
+  out << module ? module.c_str() : "[unknown module]";
+  out << offset;
+}
+

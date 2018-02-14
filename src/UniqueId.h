@@ -1,34 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2010, Lawrence Livermore National Security, LLC.  
-// Produced at the Lawrence Livermore National Laboratory  
-// Written by Todd Gamblin, tgamblin@llnl.gov.
-// LLNL-CODE-417602
-// All rights reserved.  
-// 
-// This file is part of Libra. For details, see http://github.com/tgamblin/libra.
-// Please also read the LICENSE file for further information.
-// 
-// Redistribution and use in source and binary forms, with or without modification, are
-// permitted provided that the following conditions are met:
-// 
-//  * Redistributions of source code must retain the above copyright notice, this list of
-//    conditions and the disclaimer below.
-//  * Redistributions in binary form must reproduce the above copyright notice, this list of
-//    conditions and the disclaimer (as noted below) in the documentation and/or other materials
-//    provided with the distribution.
-//  * Neither the name of the LLNS/LLNL nor the names of its contributors may be used to endorse
-//    or promote products derived from this software without specific prior written permission.
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
-// LAWRENCE LIVERMORE NATIONAL SECURITY, LLC, THE U.S. DEPARTMENT OF ENERGY OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-// ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2010-2014, Lawrence Livermore National Security, LLC.
+// Produced at the Lawrence Livermore National Laboratory.
+//
+// This file is part of the Callpath library.
+// Written by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
+// LLNL-CODE-647183
+//
+// For details, see https://github.com/scalability-llnl/callpath
+//
+// For details, see https://scalability-llnl.github.io/spack
+// Please also see the LICENSE file for our notice and the LGPL.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License (as published by
+// the Free Software Foundation) version 2.1 dated February 1999.
+//
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the IMPLIED WARRANTY OF
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the terms and
+// conditions of the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+//////////////////////////////////////////////////////////////////////////////
 #ifndef UNIQUE_ID_H
 #define UNIQUE_ID_H
 
@@ -59,11 +54,11 @@ struct dereference_lt {
 /// this keeps an internal set of pointers to unique std::strings.
 ///
 /// Since instances of UniqueId contain unique pointers (looked up on creation), they
-/// can compared fast for equality, less than, etc.  
+/// can compared fast for equality, less than, etc.
 /// Methods for serialization, etc are also provided here.
 ///
 /// To make your own unique id class using UniqueId, use static polymorphism:
-/// 
+///
 ///    class MyUniqueIdClass : public UniqueId<MyUniqueIdClass> {
 ///    public:
 ///        MyUniqueIdClass(const std::string& id) : UniqueId<MyUniqueIdClass>(id) { }
@@ -72,15 +67,15 @@ struct dereference_lt {
 /// That's all!
 ///
 template <class Derived>
-class UniqueId 
-  : public safe_bool< UniqueId<Derived> > 
+class UniqueId
+  : public safe_bool< UniqueId<Derived> >
 {
 public:
   /// Type for set of unique uid values.
   typedef std::set<const std::string*, dereference_lt> id_set;
   typedef typename id_set::iterator id_set_iterator;
 
-  /// Map type for translating ids from remote processes.  This maps unintptr_t's 
+  /// Map type for translating ids from remote processes.  This maps unintptr_t's
   /// (remote pointer values) to local string*'s.  It needs to be specially constructed
   /// using static routines below.
   typedef std::map<uintptr_t, Derived> id_map;
@@ -88,7 +83,7 @@ public:
 protected:
   /// Unique identifier for this instance of the UniqueId
   const std::string *identifier;
-  
+
   static id_set& get_identifiers() {
     static id_set ids;
     return ids;
@@ -105,24 +100,24 @@ protected:
 
   /// Raw pointer constructor.  Used internally for serialization.
   UniqueId(const std::string *id) : identifier(id) { }
-  
+
   /// Construct a Null UniqueId.  Subclasses can choose to expose this or not.
   UniqueId() : identifier(lookup("")) { }
-  
+
   /// Constructor takes a const std::string reference, gets a unique pointer to its value,
   /// and inits this uid with the pointer.
   UniqueId(const std::string& id) : identifier(lookup(id)) { }
-  
+
 public:
   /// test method for safe_bool
   bool boolean_test() const {
     return !identifier->empty();
   }
-  
+
   Derived& operator=(const Derived& other) {
-    identifier = other->identifier;
+    return identifier = other->identifier;
   }
-  
+
   bool operator<(const Derived& other) const {
     return identifier < other.identifier;
   }
@@ -130,15 +125,15 @@ public:
   bool operator==(const Derived& other) const {
     return identifier == other.identifier;
   }
-  
+
   bool operator!=(const Derived& other) const {
     return identifier != other.identifier;
   }
-  
+
   bool operator>(const Derived& other) const {
     return identifier > other.identifier;
   }
-  
+
   const char *c_str() const {
     return identifier->c_str();
   }
@@ -159,11 +154,11 @@ public:
     buf[id_size] = '\0';
     return Derived(buf);
   }
-  
+
   void write_id(std::ostream& out) const {
     io_utils::vl_write(out, reinterpret_cast<uintptr_t>(identifier));
   }
-  
+
   static Derived read_id(const id_map& trans, std::istream& in) {
     uintptr_t id = io_utils::vl_read(in);
     return trans.find(id)->second;
@@ -174,8 +169,8 @@ public:
 
 #ifdef CALLPATH_HAVE_MPI
   // ----------------------------------------------------------------------------------
-  // These routines pack UniqueIds as raw strings.  Receiver process looks up received 
-  // strings and returns UniqueIds. 
+  // These routines pack UniqueIds as raw strings.  Receiver process looks up received
+  // strings and returns UniqueIds.
   // ----------------------------------------------------------------------------------
   int packed_size(MPI_Comm comm) const {
     int size = 0;
@@ -198,14 +193,14 @@ public:
   static Derived unpack(void *buf, int bufsize, int *position, MPI_Comm comm) {
     int size;
     PMPI_Unpack(buf, bufsize, position, &size, 1, MPI_INT,  comm);
-    
+
     char idstring[size+1];
     if (size) PMPI_Unpack(buf, bufsize, position, idstring, size, MPI_CHAR,  comm);
     idstring[size] = '\0';
 
     return Derived(idstring);
   }
-  
+
   // ----------------------------------------------------------------------------------
   // Below routines pack UniqueIds by id.  They require that you first send an id_map
   // that the receiver can use to translate remote ids, but can be more efficient than
@@ -245,8 +240,8 @@ public:
     }
     return size;
   }
-  
-  /// Sends all known pointer/identifier mappings to anther process. 
+
+  /// Sends all known pointer/identifier mappings to anther process.
   static void pack_id_map(void *buf, int bufsize, int *position, MPI_Comm comm) {
     int len = get_identifiers().size();
     PMPI_Pack(&len, 1, MPI_INT, buf, bufsize, position, comm);
@@ -267,13 +262,13 @@ public:
 
     for (int i=0; i < len; i++) {
       uintptr_t remote_addr;     // addr of string on remote machine
-      PMPI_Unpack(buf, bufsize, position, &remote_addr, 1, MPI_UINTPTR_T, comm); 
-      
+      PMPI_Unpack(buf, bufsize, position, &remote_addr, 1, MPI_UINTPTR_T, comm);
+
       // unpack, look up, and add mapping for raw identifier from remote process.
       dest.insert(typename id_map::value_type(remote_addr, Derived::unpack(buf, bufsize, position, comm)));
     }
   }
-  
+
 #endif // CALLPATH_HAVE_MPI
 };
 

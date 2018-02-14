@@ -1,34 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2010, Lawrence Livermore National Security, LLC.  
-// Produced at the Lawrence Livermore National Laboratory  
-// Written by Todd Gamblin, tgamblin@llnl.gov.
-// LLNL-CODE-417602
-// All rights reserved.  
-// 
-// This file is part of Libra. For details, see http://github.com/tgamblin/libra.
-// Please also read the LICENSE file for further information.
-// 
-// Redistribution and use in source and binary forms, with or without modification, are
-// permitted provided that the following conditions are met:
-// 
-//  * Redistributions of source code must retain the above copyright notice, this list of
-//    conditions and the disclaimer below.
-//  * Redistributions in binary form must reproduce the above copyright notice, this list of
-//    conditions and the disclaimer (as noted below) in the documentation and/or other materials
-//    provided with the distribution.
-//  * Neither the name of the LLNS/LLNL nor the names of its contributors may be used to endorse
-//    or promote products derived from this software without specific prior written permission.
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
-// LAWRENCE LIVERMORE NATIONAL SECURITY, LLC, THE U.S. DEPARTMENT OF ENERGY OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-// ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2010-2014, Lawrence Livermore National Security, LLC.
+// Produced at the Lawrence Livermore National Laboratory.
+//
+// This file is part of the Callpath library.
+// Written by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
+// LLNL-CODE-647183
+//
+// For details, see https://github.com/scalability-llnl/callpath
+//
+// For details, see https://scalability-llnl.github.io/spack
+// Please also see the LICENSE file for our notice and the LGPL.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License (as published by
+// the Free Software Foundation) version 2.1 dated February 1999.
+//
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the IMPLIED WARRANTY OF
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the terms and
+// conditions of the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program; if not, write to the Free Software Foundation,
+// Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+//////////////////////////////////////////////////////////////////////////////
 #include "Callpath.h"
 
 #include <string>
@@ -96,7 +91,7 @@ size_t Callpath::packed_size(MPI_Comm comm) const {
   return pack_size;
 }
 
-  
+
 void Callpath::pack(void *buf, int bufsize, int *position, MPI_Comm comm) const {
   int len = size();
   PMPI_Pack(&len, 1, MPI_INT, buf, bufsize, position, comm);
@@ -109,9 +104,9 @@ void Callpath::pack(void *buf, int bufsize, int *position, MPI_Comm comm) const 
 Callpath Callpath::unpack(const ModuleId::id_map& modules, void *buf, int bufsize, int *position, MPI_Comm comm) {
   int len;
   PMPI_Unpack(buf, bufsize, position, &len, 1, MPI_INT, comm); // number of elements
-  
+
   if (!len) return Callpath();
-   
+
   vector<FrameId> path;
   for (int i=0; i < len; i++) {
     // unpack and translate module address, then push onto the vector.
@@ -226,14 +221,14 @@ const FrameId& Callpath::get(size_t i) const {
     cerr << "Index out of bounds: " << i << endl;
     exit(1);
   }
-  return (*path)[i]; 
+  return (*path)[i];
 }
 
 
 Callpath make_path(const string& path) {
   vector<string> frame_strings;
   vector<FrameId> frames;
-  
+
   split(path, ":", frame_strings);
   for (size_t i=0; i < frame_strings.size(); i++) {
     vector<string> pieces;
@@ -261,6 +256,6 @@ Callpath make_path(const string& path) {
     frames.push_back(FrameId(module, offset));
   }
   reverse(frames.begin(), frames.end());
-  
+
   return Callpath::create(frames);
 }
